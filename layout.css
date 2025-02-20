@@ -1,0 +1,176 @@
+/* Estilização geral */
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    color: #007BFF;
+    margin-bottom: 20px;
+}
+
+/* Estilização do Carousel */
+.carousel {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.carousel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel img.active {
+    opacity: 1;
+}
+
+.carousel button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 18px;
+    border-radius: 50%;
+}
+
+.carousel .prev {
+    left: 10px;
+}
+
+.carousel .next {
+    right: 10px;
+}
+
+/* Estilização dos detalhes do imóvel */
+.property-details {
+    max-width: 800px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.property-details p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.property-details .info {
+    font-weight: bold;
+    color: #007BFF;
+}
+
+/* Estilização do formulário de reserva */
+.reservation-box {
+    max-width: 400px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.reservation-box label {
+    font-weight: bold;
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.reservation-box input, .reservation-box select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.reservation-box button {
+    width: 100%;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.reservation-box button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilização do calendário */
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+}
+
+.calendar div {
+    padding: 10px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.calendar div.selected {
+    background: #007BFF;
+    color: white;
+}
+
+/* Estilização das regras */
+.rules-box {
+    max-width: 800px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.rules-box h3 {
+    color: #007BFF;
+}
+
+.rules-box p {
+    font-size: 14px;
+    line-height: 1.5;
+}
