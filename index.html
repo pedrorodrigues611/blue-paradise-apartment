@@ -4,40 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blue Paradise Apartment - Reserva</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="layout.css"> <!-- CSS externo -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="container">
-        <div class="carroussel">
-            <img src="https://i.imgur.com/h9vIQpq.jpeg" class="active">
-            <img src="https://i.imgur.com/BgggDFV.jpeg">
-            <img src="https://imgur.com/Fe8ECNE.jpeg">
-        </div>
-        <div class="details">
-            <h1>Blue Paradise Apartment</h1>
-            <p><strong>Localização:</strong> Caniço</p>
-            <p><strong>Avaliação:</strong> 4.9 ★</p>
-            <p><strong>Capacidade:</strong> 4 hóspedes</p>
-            <p><strong>Comodidades:</strong> Cozinha, Ar condicionado, Wi-Fi</p>
-            <h2>Escolha suas datas</h2>
-            <div class="calendar" id="calendar"></div>
-            <div class="reservation-form">
-                <label>Número de hóspedes:</label>
-                <input type="number" id="guests" min="1" max="4" value="1">
-                <p><strong>Preço total:</strong> <span id="total-price">€0</span></p>
-                <button id="details-btn">Ver detalhes</button>
-                <div id="price-details" class="hidden">
-                    <p>Preço por noite: <span id="price-night">€100</span></p>
-                    <p>Taxa de limpeza: <span id="cleaning-fee">€20</span></p>
-                    <p>Total: <span id="final-total">€0</span></p>
-                    <button id="hide-details">Ocultar</button>
-                </div>
-                <button id="book-btn">Reservar</button>
+        <h1>Blue Paradise Apartment</h1>
+
+        <div class="content">
+            <!-- Seção das imagens -->
+            <div class="carousel">
+                <img src="https://i.imgur.com/h9vIQpq.jpeg" class="active">
+                <img src="https://i.imgur.com/BgggDFV.jpeg">
+                <img src="https://imgur.com/Fe8ECNE.jpeg">
+                <img src="https://imgur.com/rVkhRc4.jpeg">
+                <img src="https://imgur.com/JpITN8m.jpeg">
+                <img src="https://imgur.com/HM1pA93.jpeg">
+                <button class="prev" onclick="prevImage(this)">&#10094;</button>
+                <button class="next" onclick="nextImage(this)">&#10095;</button>
             </div>
+
+            <!-- Seção de descrição e reserva -->
+            <div class="details-reservation">
+                <div class="property-details">
+                    <h3>Detalhes do Imóvel</h3>
+                    <p><span class="info">Localização:</span> Caniço</p>
+                    <p><span class="info">Avaliação:</span> 4.9 ★</p>
+                    <p><span class="info">Capacidade:</span> 4 hóspedes</p>
+                    <p><span class="info">Quartos:</span> 2</p>
+                    <p><span class="info">Banheiros:</span> 2</p>
+                    <p><span class="info">Características:</span> Cozinha · Ar condicionado · Máquina de lavar</p>
+                </div>
+
+                <div class="reservation-box">
+                    <h3>Faça sua Reserva</h3>
+                    <label for="checkin">Check-in:</label>
+                    <input type="date" id="checkin">
+
+                    <label for="checkout">Check-out:</label>
+                    <input type="date" id="checkout">
+
+                    <label for="guests">Nº de Hóspedes:</label>
+                    <select id="guests">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+
+                    <p><strong>Preço total: <span id="total-price">€0</span></strong></p>
+                    
+                    <button onclick="toggleDetails()">Ver detalhes</button>
+                    <div id="price-details" style="display: none;">
+                        <p>Preço por noite: €100</p>
+                        <p>Taxa de limpeza: €30</p>
+                        <p>Total: <span id="final-price">€0</span></p>
+                        <button onclick="toggleDetails()">Ocultar</button>
+                    </div>
+
+                    <button onclick="proceedToCheckout()">Reservar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Regras e políticas -->
+        <div class="rules-box">
+            <h3>Regras da Casa</h3>
+            <p>✔ Check-in: 15:00h</p>
+            <p>✔ Check-out: 12:00h</p>
+            <p>✔ Crianças: permitido</p>
+            <p>✔ Bebês: permitido</p>
+            <p>❌ Animais de estimação: não permitido</p>
+            <p>❌ Festas e eventos: não permitido</p>
+            <p>❌ Fumar dentro: não permitido</p>
         </div>
     </div>
 
-    <script src="script.js"></script> <!-- JavaScript externo -->
+    <script>
+        function prevImage(button) {
+            let carousel = button.parentElement;
+            let images = carousel.querySelectorAll('img');
+            let index = [...images].findIndex(img => img.classList.contains('active'));
+            images[index].classList.remove('active');
+            images[(index - 1 + images.length) % images.length].classList.add('active');
+        }
+
+        function nextImage(button) {
+            let carousel = button.parentElement;
+            let images = carousel.querySelectorAll('img');
+            let index = [...images].findIndex(img => img.classList.contains('active'));
+            images[index].classList.remove('active');
+            images[(index + 1) % images.length].classList.add('active');
+        }
+
+        function toggleDetails() {
+            let details = document.getElementById("price-details");
+            details.style.display = details.style.display === "none" ? "block" : "none";
+        }
+
+        function proceedToCheckout() {
+            alert("Indo para a página de pagamento...");
+            // Aqui pode redirecionar para a página de checkout
+        }
+    </script>
+
 </body>
 </html>
