@@ -9,28 +9,35 @@
         body {
             font-family: 'Open Sans', sans-serif;
             margin: 0;
-            padding: 20px;
-            text-align: center;
+            padding: 0;
             background-color: #f5f5f5;
         }
+
+        header {
+            text-align: center;
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+        }
+
         h1 {
             margin-bottom: 20px;
         }
+
         .property-details {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 1000px;
+            margin: 20px auto;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             text-align: left;
         }
-        .property-details img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 10px;
+
+        .property-details h3 {
+            color: #333;
         }
+
         .carousel {
             position: relative;
             width: 100%;
@@ -38,6 +45,7 @@
             overflow: hidden;
             margin-bottom: 20px;
         }
+
         .carousel img {
             width: 100%;
             height: 400px;
@@ -48,9 +56,11 @@
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
         }
+
         .carousel img.active {
             opacity: 1;
         }
+
         .carousel button {
             position: absolute;
             top: 50%;
@@ -59,28 +69,44 @@
             color: white;
             border: none;
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 10px;
             z-index: 10;
         }
+
         .carousel .prev {
             left: 10px;
         }
+
         .carousel .next {
             right: 10px;
         }
+
         .info {
             font-weight: bold;
             color: #007BFF;
         }
-            iframe {
-            width: 100%;
-            height: 1800px;
-            border: none;
-            opacity: 0; /* Começa invisível */
-            animation: fadeIn 1.5s forwards; /* Animação de aparecimento */
+
+        .amenities {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
         }
 
-        /* Definindo a animação */
+        .calendar {
+            margin-top: 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        iframe {
+            width: 100%;
+            border: none;
+        }
+
+        /* Definindo animação de fade para as imagens */
         @keyframes fadeIn {
             0% {
                 opacity: 0;
@@ -93,46 +119,65 @@
 </head>
 <body>
 
+<header>
     <h1>Blue Paradise Apartment</h1>
+    <p>Caniço, Madeira</p>
+</header>
 
-    <div class="property-details">
-        <div class="carousel">
-            <img src="https://i.imgur.com/h9vIQpq.jpeg" class="active">
-            <img src="https://i.imgur.com/BgggDFV.jpeg">
-            <img src="https://imgur.com/Fe8ECNE.jpeg">
-            <img src="https://imgur.com/rVkhRc4.jpeg">
-            <img src="https://imgur.com/JpITN8m.jpeg">
-            <img src="https://imgur.com/HM1pA93.jpeg">
-            <button class="prev" onclick="prevImage(this)">&#10094;</button>
-            <button class="next" onclick="nextImage(this)">&#10095;</button>
-        </div>
-        
-        <h3>Detalhes do Imóvel</h3>
-        <p><span class="info">Localização:</span> Caniço</p>
-        <p><span class="info">Avaliação:</span> 4.9 ★</p>
-        <p><span class="info">Capacidade:</span> 4 hóspedes</p>
-        <p><span class="info">Quartos:</span> 2</p>
-        <p><span class="info">Banheiros:</span> 2</p>
-        <p><span class="info">Características:</span> Cozinha · Ar condicionado · Máquina de lavar</p>
+<div class="property-details">
+    <div class="carousel">
+        <img src="https://i.imgur.com/h9vIQpq.jpeg" class="active">
+        <img src="https://i.imgur.com/BgggDFV.jpeg">
+        <img src="https://imgur.com/Fe8ECNE.jpeg">
+        <img src="https://imgur.com/rVkhRc4.jpeg">
+        <img src="https://imgur.com/JpITN8m.jpeg">
+        <img src="https://imgur.com/HM1pA93.jpeg">
+        <button class="prev" onclick="prevImage(this)">&#10094;</button>
+        <button class="next" onclick="nextImage(this)">&#10095;</button>
     </div>
 
-    <script>
-        function prevImage(button) {
-            let carousel = button.parentElement;
-            let images = carousel.querySelectorAll('img');
-            let index = [...images].findIndex(img => img.classList.contains('active'));
-            images[index].classList.remove('active');
-            images[(index - 1 + images.length) % images.length].classList.add('active');
-        }
+    <h3>Detalhes do Imóvel</h3>
+    <p><span class="info">Localização:</span> Caniço</p>
+    <p><span class="info">Avaliação:</span> 4.9 ★</p>
+    <p><span class="info">Capacidade:</span> 4 hóspedes</p>
+    <p><span class="info">Quartos:</span> 2</p>
+    <p><span class="info">Banheiros:</span> 2</p>
+    <p><span class="info">Características:</span> Cozinha · Ar condicionado · Máquina de lavar</p>
 
-        function nextImage(button) {
-            let carousel = button.parentElement;
-            let images = carousel.querySelectorAll('img');
-            let index = [...images].findIndex(img => img.classList.contains('active'));
-            images[index].classList.remove('active');
-            images[(index + 1) % images.length].classList.add('active');
-        }
-    </script>
+    <div class="amenities">
+        <h3>Comodidades</h3>
+        <ul>
+            <li>Wi-Fi gratuito</li>
+            <li>Ar condicionado</li>
+            <li>Máquina de lavar</li>
+            <li>Cozinha equipada</li>
+            <li>Varanda com vista para o mar</li>
+        </ul>
+    </div>
+
+    <div class="calendar">
+        <h3>Verifique a Disponibilidade</h3>
+        <iframe src="https://calendar.google.com/calendar/embed?src=your_calendar_id&ctz=Europe%2FLisbon" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+    </div>
+</div>
+
+<script>
+    function prevImage(button) {
+        let carousel = button.parentElement;
+        let images = carousel.querySelectorAll('img');
+        let index = [...images].findIndex(img => img.classList.contains('active'));
+        images[index].classList.remove('active');
+        images[(index - 1 + images.length) % images.length].classList.add('active');
+    }
+
+    function nextImage(button) {
+        let carousel = button.parentElement;
+        let images = carousel.querySelectorAll('img');
+        let index = [...images].findIndex(img => img.classList.contains('active'));
+        images[index].classList.remove('active');
+        images[(index + 1) % images.length].classList.add('active');
+    }
+</script>
 
 </body>
 </html>
