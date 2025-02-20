@@ -164,3 +164,24 @@ body {
     border: none;
     border-radius: 5px;
 }
+
+/* Estilo da Descrição do Apartamento */
+.description {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+.description h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.description p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}
+
