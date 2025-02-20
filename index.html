@@ -5,7 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blue Paradise Apartment by Hoperty</title>
     <link rel="stylesheet" href="layout.css">
-    <script defer src="script.js"></script>
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Trocar imagem principal ao clicar nas miniaturas
+            const mainImage = document.querySelector(".main-image img");
+            const thumbnails = document.querySelectorAll(".thumbnail-images img");
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener("click", function() {
+                    mainImage.src = this.src;
+                });
+            });
+
+            // Mostrar/Esconder comodidades
+            const showAmenitiesBtn = document.getElementById("show-amenities");
+            const amenitiesList = document.getElementById("amenities-list");
+            showAmenitiesBtn.addEventListener("click", function() {
+                amenitiesList.classList.toggle("hidden");
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="container">
