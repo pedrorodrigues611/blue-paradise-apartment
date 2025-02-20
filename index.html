@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reserva de Casa</title>
     <link rel="stylesheet" href="layout.css">
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function() {
+            let mainImage = document.querySelector(".main-image img");
+            let thumbnails = document.querySelectorAll(".thumbnail-images img");
+            
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener("click", function() {
+                    mainImage.src = this.src;
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="container">
