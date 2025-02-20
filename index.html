@@ -7,29 +7,42 @@
     <link rel="stylesheet" href="layout.css">
     <script defer>
         document.addEventListener("DOMContentLoaded", function() {
-            // Trocar imagem principal ao clicar nas miniaturas
+            // Carrossel de imagens
+            let currentImageIndex = 0;
+            const images = [
+                "https://i.imgur.com/h9vIQpq.jpeg",
+                "https://i.imgur.com/BgggDFV.jpeg",
+                "https://imgur.com/Fe8ECNE.jpeg",
+                "https://imgur.com/rVkhRc4.jpeg",
+                "https://imgur.com/JpITN8m.jpeg"
+            ];
             const mainImage = document.querySelector(".main-image img");
-            const thumbnails = document.querySelectorAll(".thumbnail-images img");
-            thumbnails.forEach(thumbnail => {
-                thumbnail.addEventListener("click", function() {
-                    mainImage.src = this.src;
-                });
+            const nextButton = document.querySelector(".next");
+            const prevButton = document.querySelector(".prev");
+
+            function updateImage() {
+                mainImage.src = images[currentImageIndex];
+            }
+
+            nextButton.addEventListener("click", function() {
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+                updateImage();
+            });
+
+            prevButton.addEventListener("click", function() {
+                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+                updateImage();
             });
 
             // Mostrar/Esconder comodidades
             const showAmenitiesBtn = document.getElementById("show-amenities");
             const amenitiesList = document.getElementById("amenities-list");
             showAmenitiesBtn.addEventListener("click", function() {
-                amenitiesList.classList.toggle("hidden");
-            });
-
-            // Exibir imagens extras ao clicar em "+3 fotos"
-            const moreImagesBtn = document.querySelector(".more-images");
-            moreImagesBtn.addEventListener("click", function() {
-                document.querySelectorAll(".thumbnail-images img").forEach(img => {
-                    img.style.display = "inline-block";
-                });
-                moreImagesBtn.style.display = "none";
+                if (amenitiesList.style.display === "none") {
+                    amenitiesList.style.display = "block";
+                } else {
+                    amenitiesList.style.display = "none";
+                }
             });
         });
     </script>
@@ -37,16 +50,11 @@
 <body>
     <div class="container">
         <div class="image-gallery">
+            <button class="prev">&#10094;</button>
             <div class="main-image">
                 <img src="https://i.imgur.com/h9vIQpq.jpeg" alt="Casa">
             </div>
-            <div class="thumbnail-images">
-                <img src="https://i.imgur.com/BgggDFV.jpeg" alt="">
-                <img src="https://imgur.com/Fe8ECNE.jpeg" alt="">
-                <img src="https://imgur.com/rVkhRc4.jpeg" alt="">
-                <img src="https://imgur.com/JpITN8m.jpeg" alt="">
-                <span class="more-images" style="cursor:pointer; color:blue; text-decoration:underline;">+3 fotos</span>
-            </div>
+            <button class="next">&#10095;</button>
         </div>
         
         <div class="details">
