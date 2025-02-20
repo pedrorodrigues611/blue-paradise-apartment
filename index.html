@@ -22,6 +22,15 @@
             showAmenitiesBtn.addEventListener("click", function() {
                 amenitiesList.classList.toggle("hidden");
             });
+
+            // Exibir imagens extras ao clicar em "+3 fotos"
+            const moreImagesBtn = document.querySelector(".more-images");
+            moreImagesBtn.addEventListener("click", function() {
+                document.querySelectorAll(".thumbnail-images img").forEach(img => {
+                    img.style.display = "inline-block";
+                });
+                moreImagesBtn.style.display = "none";
+            });
         });
     </script>
 </head>
@@ -36,7 +45,7 @@
                 <img src="https://imgur.com/Fe8ECNE.jpeg" alt="">
                 <img src="https://imgur.com/rVkhRc4.jpeg" alt="">
                 <img src="https://imgur.com/JpITN8m.jpeg" alt="">
-                <span class="more-images">+3 fotos</span>
+                <span class="more-images" style="cursor:pointer; color:blue; text-decoration:underline;">+3 fotos</span>
             </div>
         </div>
         
@@ -47,7 +56,7 @@
             <div class="facilities">
                 <p>🍽 Cozinha &nbsp; 🔥 Forno &nbsp; 🌿 Jardim</p>
                 <button id="show-amenities">Mostrar todas as 10 comodidades</button>
-                <div id="amenities-list" class="hidden">
+                <div id="amenities-list" class="hidden" style="display:none;">
                     <p>✔ Wi-Fi rápido &nbsp; ✔ Ar Condicionado &nbsp; ✔ Máquina de Lavar</p>
                     <p>✔ Piscina &nbsp; ✔ TV a Cabo &nbsp; ✔ Estacionamento</p>
                 </div>
