@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blue Paradise Apartment - Hoperty</title>
+    <title>Blue Paradise Apartment - Reserva</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <style>
         body {
@@ -24,8 +24,8 @@
             margin-bottom: 20px;
         }
 
-        .property-details {
-            max-width: 1000px;
+        .reservation-form {
+            max-width: 800px;
             margin: 20px auto;
             background-color: white;
             border-radius: 10px;
@@ -34,148 +34,220 @@
             text-align: left;
         }
 
-        .property-details h3 {
-            color: #333;
-        }
-
-        .carousel {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            overflow: hidden;
+        .form-group {
             margin-bottom: 20px;
         }
 
-        .carousel img {
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
             width: 100%;
-            height: 400px;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
         }
 
-        .carousel img.active {
-            opacity: 1;
+        .price-summary {
+            margin-top: 20px;
         }
 
-        .carousel button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
+        .price-summary p {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .details-button {
+            background-color: #007BFF;
             color: white;
+            padding: 10px 20px;
             border: none;
             cursor: pointer;
-            padding: 10px;
-            z-index: 10;
-        }
-
-        .carousel .prev {
-            left: 10px;
-        }
-
-        .carousel .next {
-            right: 10px;
-        }
-
-        .info {
-            font-weight: bold;
-            color: #007BFF;
-        }
-
-        .amenities {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f8f8f8;
             border-radius: 5px;
+            margin-top: 10px;
         }
 
-        .calendar {
-            margin-top: 30px;
+        .details-button:hover {
+            background-color: #0056b3;
+        }
+
+        .details {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .details p {
+            font-size: 14px;
+        }
+
+        .hide-details {
+            background-color: #e0e0e0;
+            color: #333;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .booking-summary {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
 
-        iframe {
-            width: 100%;
+        .terms {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .terms input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .submit-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
             border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 20px;
         }
 
-        /* Definindo animação de fade para as imagens */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
+        .submit-button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Blue Paradise Apartment</h1>
-    <p>Caniço, Madeira</p>
+    <h1>Blue Paradise Apartment - Reserva</h1>
 </header>
 
-<div class="property-details">
-    <div class="carousel">
-        <img src="https://i.imgur.com/h9vIQpq.jpeg" class="active">
-        <img src="https://i.imgur.com/BgggDFV.jpeg">
-        <img src="https://imgur.com/Fe8ECNE.jpeg">
-        <img src="https://imgur.com/rVkhRc4.jpeg">
-        <img src="https://imgur.com/JpITN8m.jpeg">
-        <img src="https://imgur.com/HM1pA93.jpeg">
-        <button class="prev" onclick="prevImage(this)">&#10094;</button>
-        <button class="next" onclick="nextImage(this)">&#10095;</button>
+<div class="reservation-form">
+    <!-- Formulário de Reserva -->
+    <div class="form-group">
+        <label for="guests">Número de hóspedes</label>
+        <select id="guests">
+            <option value="1">1 hóspede</option>
+            <option value="2">2 hóspedes</option>
+            <option value="3">3 hóspedes</option>
+            <option value="4">4 hóspedes</option>
+        </select>
     </div>
 
-    <h3>Detalhes do Imóvel</h3>
-    <p><span class="info">Localização:</span> Caniço</p>
-    <p><span class="info">Avaliação:</span> 4.9 ★</p>
-    <p><span class="info">Capacidade:</span> 4 hóspedes</p>
-    <p><span class="info">Quartos:</span> 2</p>
-    <p><span class="info">Banheiros:</span> 2</p>
-    <p><span class="info">Características:</span> Cozinha · Ar condicionado · Máquina de lavar</p>
-
-    <div class="amenities">
-        <h3>Comodidades</h3>
-        <ul>
-            <li>Wi-Fi gratuito</li>
-            <li>Ar condicionado</li>
-            <li>Máquina de lavar</li>
-            <li>Cozinha equipada</li>
-            <li>Varanda com vista para o mar</li>
-        </ul>
+    <div class="form-group">
+        <label for="check-in">Data de Check-in</label>
+        <input type="date" id="check-in">
     </div>
 
-    <div class="calendar">
-        <h3>Verifique a Disponibilidade</h3>
-        <iframe src="https://calendar.google.com/calendar/embed?src=your_calendar_id&ctz=Europe%2FLisbon" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+    <div class="form-group">
+        <label for="check-out">Data de Check-out</label>
+        <input type="date" id="check-out">
     </div>
+
+    <div class="price-summary">
+        <p>Preço total: <span id="total-price">0,00€</span></p>
+        <button class="details-button" onclick="showDetails()">Ver detalhes</button>
+
+        <div class="details">
+            <p>Preço diário por noite: <span id="night-price">100,00€</span></p>
+            <p>Taxa de limpeza: <span id="cleaning-fee">20,00€</span></p>
+            <p>Preço total: <span id="total-price-details">0,00€</span></p>
+            <button class="hide-details" onclick="hideDetails()">Ocultar</button>
+        </div>
+    </div>
+
+    <button class="submit-button" onclick="proceedToBooking()">Reservar Agora</button>
+</div>
+
+<!-- Resumo da Reserva -->
+<div class="booking-summary" style="display: none;">
+    <h3>Detalhes da Reserva</h3>
+    <div class="form-group">
+        <label for="full-name">Nome Completo</label>
+        <input type="text" id="full-name" placeholder="Nome Completo">
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Email">
+    </div>
+    <div class="form-group">
+        <label for="phone">Número de Telefone</label>
+        <input type="tel" id="phone" placeholder="Número de Telefone">
+    </div>
+    <div class="form-group">
+        <label for="address">Endereço de Cobrança</label>
+        <input type="text" id="address" placeholder="Endereço de Cobrança">
+    </div>
+
+    <h4>Informação de Pagamento</h4>
+    <div class="form-group">
+        <label for="card-number">Número do Cartão</label>
+        <input type="text" id="card-number" placeholder="Número do Cartão">
+    </div>
+    <div class="form-group">
+        <label for="expiry-date">Data de Expiração</label>
+        <input type="month" id="expiry-date">
+    </div>
+    <div class="form-group">
+        <label for="cvv">CVV</label>
+        <input type="text" id="cvv" placeholder="CVV">
+    </div>
+
+    <div class="terms">
+        <label>
+            <input type="checkbox" id="terms-checkbox">
+            Aceito a <strong>Política de Privacidade</strong> e os <strong>Termos de Serviço</strong>.
+        </label>
+    </div>
+
+    <button class="submit-button" onclick="completeBooking()">Finalizar Reserva</button>
 </div>
 
 <script>
-    function prevImage(button) {
-        let carousel = button.parentElement;
-        let images = carousel.querySelectorAll('img');
-        let index = [...images].findIndex(img => img.classList.contains('active'));
-        images[index].classList.remove('active');
-        images[(index - 1 + images.length) % images.length].classList.add('active');
+    let nightPrice = 100;
+    let cleaningFee = 20;
+
+    function showDetails() {
+        let totalPrice = calculateTotalPrice();
+        document.getElementById('total-price').textContent = totalPrice + "€";
+        document.getElementById('total-price-details').textContent = totalPrice + "€";
+        document.querySelector('.details').style.display = 'block';
     }
 
-    function nextImage(button) {
-        let carousel = button.parentElement;
-        let images = carousel.querySelectorAll('img');
-        let index = [...images].findIndex(img => img.classList.contains('active'));
-        images[index].classList.remove('active');
-        images[(index + 1) % images.length].classList.add('active');
+    function hideDetails() {
+        document.querySelector('.details').style.display = 'none';
+    }
+
+    function calculateTotalPrice() {
+        let checkInDate = new Date(document.getElementById('check-in').value);
+        let checkOutDate = new Date(document.getElementById('check-out').value);
+        let days = (checkOutDate - checkInDate) / (1000 * 3600 * 24);
+        return (days * nightPrice) + cleaningFee;
+    }
+
+    function proceedToBooking() {
+        let totalPrice = calculateTotalPrice();
+        document.getElementById('total-price').textContent = totalPrice + "€";
+        document.querySelector('.reservation-form').style.display = 'none';
+        document.querySelector('.booking-summary').style.display = 'block';
+    }
+
+    function completeBooking() {
+        if (document.getElementById('terms-checkbox').checked) {
+            alert("Reserva concluída com sucesso!");
+        } else {
+            alert("Você precisa aceitar a Política de Privacidade e os Termos de Serviço.");
+        }
     }
 </script>
 
