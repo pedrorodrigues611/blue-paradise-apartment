@@ -3,111 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blue Paradise Apartment - Reserva</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <title>Reserva de Casa</title>
     <link rel="stylesheet" href="layout.css">
 </head>
 <body>
-
     <div class="container">
-        <h1>Blue Paradise Apartment</h1>
-
-        <div class="content">
-            <!-- Seção das imagens -->
-            <div class="carousel">
-                <img src="https://i.imgur.com/h9vIQpq.jpeg" class="active">
-                <img src="https://i.imgur.com/BgggDFV.jpeg">
-                <img src="https://imgur.com/Fe8ECNE.jpeg">
-                <img src="https://imgur.com/rVkhRc4.jpeg">
-                <img src="https://imgur.com/JpITN8m.jpeg">
-                <img src="https://imgur.com/HM1pA93.jpeg">
-                <button class="prev" onclick="prevImage(this)">&#10094;</button>
-                <button class="next" onclick="nextImage(this)">&#10095;</button>
+        <div class="image-gallery">
+            <div class="main-image">
+                <img src="https://i.imgur.com/h9vIQpq.jpeg" alt="Casa">
             </div>
-
-            <!-- Seção de descrição e reserva -->
-            <div class="details-reservation">
-                <div class="property-details">
-                    <h3>Detalhes do Imóvel</h3>
-                    <p><span class="info">Localização:</span> Caniço</p>
-                    <p><span class="info">Avaliação:</span> 4.9 ★</p>
-                    <p><span class="info">Capacidade:</span> 4 hóspedes</p>
-                    <p><span class="info">Quartos:</span> 2</p>
-                    <p><span class="info">Banheiros:</span> 2</p>
-                    <p><span class="info">Características:</span> Cozinha · Ar condicionado · Máquina de lavar</p>
-                </div>
-
-                <div class="reservation-box">
-                    <h3>Faça sua Reserva</h3>
-                    <label for="checkin">Check-in:</label>
-                    <input type="date" id="checkin">
-
-                    <label for="checkout">Check-out:</label>
-                    <input type="date" id="checkout">
-
-                    <label for="guests">Nº de Hóspedes:</label>
-                    <select id="guests">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                    </select>
-
-                    <p><strong>Preço total: <span id="total-price">€0</span></strong></p>
-                    
-                    <button onclick="toggleDetails()">Ver detalhes</button>
-                    <div id="price-details" style="display: none;">
-                        <p>Preço por noite: €100</p>
-                        <p>Taxa de limpeza: €30</p>
-                        <p>Total: <span id="final-price">€0</span></p>
-                        <button onclick="toggleDetails()">Ocultar</button>
-                    </div>
-
-                    <button onclick="proceedToCheckout()">Reservar</button>
-                </div>
+            <div class="thumbnail-images">
+                <img src="https://i.imgur.com/BgggDFV.jpeg" alt="">
+                <img src="https://imgur.com/Fe8ECNE.jpeg" alt="">
+                <img src="https://imgur.com/rVkhRc4.jpeg" alt="">
+                <img src="https://imgur.com/JpITN8m.jpeg" alt="">
+                <span class="more-images">+3 fotos</span>
             </div>
         </div>
-
-        <!-- Regras e políticas -->
-        <div class="rules-box">
-            <h3>Regras da Casa</h3>
-            <p>✔ Check-in: 15:00h</p>
-            <p>✔ Check-out: 12:00h</p>
-            <p>✔ Crianças: permitido</p>
-            <p>✔ Bebês: permitido</p>
-            <p>❌ Animais de estimação: não permitido</p>
-            <p>❌ Festas e eventos: não permitido</p>
-            <p>❌ Fumar dentro: não permitido</p>
+        
+        <div class="details">
+            <h1>Loureiro House by Madeira Dream Stays</h1>
+            <p>Funchal - 2 hóspedes - 1 quarto - 1 banheiro</p>
+            
+            <div class="facilities">
+                <p>🍽 Cozinha &nbsp; 🔥 Forno &nbsp; 🌿 Jardim</p>
+                <button>Mostrar todas as 10 comodidades</button>
+            </div>
+            
+            <div class="rules">
+                <p>✔ Check-in: 15h &nbsp; ✔ Check-out: 11h</p>
+                <p>✔ Crianças permitido &nbsp; ❌ Fumar não permitido</p>
+            </div>
+            
+            <div class="reservation-box">
+                <label for="guests">Nº de hóspedes</label>
+                <select id="guests">
+                    <option>1</option>
+                    <option>2</option>
+                </select>
+                <button>Reservar</button>
+            </div>
         </div>
     </div>
-
-    <script>
-        function prevImage(button) {
-            let carousel = button.parentElement;
-            let images = carousel.querySelectorAll('img');
-            let index = [...images].findIndex(img => img.classList.contains('active'));
-            images[index].classList.remove('active');
-            images[(index - 1 + images.length) % images.length].classList.add('active');
-        }
-
-        function nextImage(button) {
-            let carousel = button.parentElement;
-            let images = carousel.querySelectorAll('img');
-            let index = [...images].findIndex(img => img.classList.contains('active'));
-            images[index].classList.remove('active');
-            images[(index + 1) % images.length].classList.add('active');
-        }
-
-        function toggleDetails() {
-            let details = document.getElementById("price-details");
-            details.style.display = details.style.display === "none" ? "block" : "none";
-        }
-
-        function proceedToCheckout() {
-            alert("Indo para a página de pagamento...");
-            // Aqui pode redirecionar para a página de checkout
-        }
-    </script>
-
 </body>
 </html>
