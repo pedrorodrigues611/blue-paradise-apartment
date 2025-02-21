@@ -105,13 +105,14 @@
                 <button class="reserve-btn">Reservar</button>
             </div>
 
+            <!-- Calendário -->
             <div class="calendar">
                 <h3>Disponibilidade</h3>
                 <iframe src="https://calendar.google.com/calendar/embed?
-src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
-&src=gq3m477imq71fcv56kojh45833nphv7r%40import.calendar.google.com
-&ctz=Europe%2FLisbon" 
-style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+                src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
+                &src=gq3m477imq71fcv56kojh45833nphv7r%40import.calendar.google.com
+                &ctz=Europe%2FLisbon" 
+                style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
             </div>
         </div>
     </div>
@@ -149,50 +150,17 @@ style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></ifr
         .reserve-btn:hover {
             background-color: #e0484d;
         }
-
-        /* Estilo do carrossel */
-        .image-gallery {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .prev, .next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 20px;
-            border-radius: 50%;
-        }
-
-        .prev { left: 10px; }
-        .next { right: 10px; }
     </style>
-<div class="calendar">
-            <h3>Disponibilidade</h3>
-            <iframe src="https://calendar.google.com/calendar/embed?
-            src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
-            &src=gq3m477imq71fcv56kojh45833nphv7r%40import.calendar.google.com
-            &ctz=Europe%2FLisbon" 
-            style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
-        </div>
-    </div>
 
     <script defer>
         document.addEventListener("DOMContentLoaded", function () {
             const checkinInput = document.getElementById("checkin");
             const checkoutInput = document.getElementById("checkout");
+            const apiKey = "AIzaSyAhj2SIN0rsso2drkyMX6jRd6iGg6C7L6o";  // Sua chave API
             const calendarId1 = "c4qe8v081ip4g6hfb5v5i99j9jfafsfb@import.calendar.google.com";
             const calendarId2 = "gq3m477imq71fcv56kojh45833nphv7r@import.calendar.google.com";
-            const apiKey = "SUA_API_KEY"; // Substitua pela sua API Key do Google
 
+            // Função para buscar eventos e pegar as datas bloqueadas
             async function getBookedDates() {
                 let events = [];
                 const urls = [
@@ -206,7 +174,7 @@ style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></ifr
                     if (data.items) {
                         data.items.forEach(event => {
                             if (event.start && event.start.date) {
-                                events.push(event.start.date);
+                                events.push(event.start.date);  // Adiciona a data do evento
                             }
                         });
                     }
@@ -214,24 +182,28 @@ style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></ifr
                 return events;
             }
 
+            // Função para desabilitar as datas reservadas
             async function disableBookedDates() {
                 let bookedDates = await getBookedDates();
+
+                // Verifica se a data de check-in é bloqueada
                 checkinInput.addEventListener("input", function () {
                     if (bookedDates.includes(this.value)) {
                         alert("Esta data já está reservada. Escolha outra.");
-                        this.value = "";
+                        this.value = "";  // Limpa o campo
                     }
                 });
 
+                // Verifica se a data de check-out é bloqueada
                 checkoutInput.addEventListener("input", function () {
                     if (bookedDates.includes(this.value)) {
                         alert("Esta data já está reservada. Escolha outra.");
-                        this.value = "";
+                        this.value = "";  // Limpa o campo
                     }
                 });
             }
 
-            disableBookedDates();
+            disableBookedDates();  // Chama a função para verificar datas bloqueadas
         });
     </script>
 </body>
