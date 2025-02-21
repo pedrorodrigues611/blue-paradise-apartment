@@ -175,6 +175,64 @@ style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></ifr
         .prev { left: 10px; }
         .next { right: 10px; }
     </style>
+<div class="calendar">
+            <h3>Disponibilidade</h3>
+            <iframe src="https://calendar.google.com/calendar/embed?
+            src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
+            &src=gq3m477imq71fcv56kojh45833nphv7r%40import.calendar.google.com
+            &ctz=Europe%2FLisbon" 
+            style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+        </div>
+    </div>
 
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function () {
+            const checkinInput = document.getElementById("checkin");
+            const checkoutInput = document.getElementById("checkout");
+            const calendarId1 = "c4qe8v081ip4g6hfb5v5i99j9jfafsfb@import.calendar.google.com";
+            const calendarId2 = "gq3m477imq71fcv56kojh45833nphv7r@import.calendar.google.com";
+            const apiKey = "SUA_API_KEY"; // Substitua pela sua API Key do Google
+
+            async function getBookedDates() {
+                let events = [];
+                const urls = [
+                    `https://www.googleapis.com/calendar/v3/calendars/${calendarId1}/events?key=${apiKey}`,
+                    `https://www.googleapis.com/calendar/v3/calendars/${calendarId2}/events?key=${apiKey}`
+                ];
+
+                for (let url of urls) {
+                    let response = await fetch(url);
+                    let data = await response.json();
+                    if (data.items) {
+                        data.items.forEach(event => {
+                            if (event.start && event.start.date) {
+                                events.push(event.start.date);
+                            }
+                        });
+                    }
+                }
+                return events;
+            }
+
+            async function disableBookedDates() {
+                let bookedDates = await getBookedDates();
+                checkinInput.addEventListener("input", function () {
+                    if (bookedDates.includes(this.value)) {
+                        alert("Esta data já está reservada. Escolha outra.");
+                        this.value = "";
+                    }
+                });
+
+                checkoutInput.addEventListener("input", function () {
+                    if (bookedDates.includes(this.value)) {
+                        alert("Esta data já está reservada. Escolha outra.");
+                        this.value = "";
+                    }
+                });
+            }
+
+            disableBookedDates();
+        });
+    </script>
 </body>
 </html>
