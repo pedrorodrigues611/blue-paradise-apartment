@@ -225,13 +225,16 @@
       cursor: pointer;
       border-radius: 4px;
       transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .date-picker-day:hover {
       background-color: #ddd;
     }
     .disabled-day {
-      background-color: #f1f1f1;
-      color: #ccc;
+      background-color: #1B3F4B;
+      color: #fff;
       cursor: not-allowed;
     }
     .selected-day {
@@ -365,7 +368,8 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
             </div>
             <!-- Campo para selecionar nº de pessoas -->
             <div class="booking-input booking-guests" id="bookingGuestsInput">
-              <img src="https://img.icons8.com/fluency/48/000000/user.png" alt="Ícone de pessoa">
+              <!-- Ícone de pessoa atualizado -->
+              <img src="https://img.icons8.com/ios-filled/50/000000/user-male-circle.png" alt="Ícone de pessoa">
               <select id="guests">
                 <option value="1" selected>1</option>
                 <option value="2">2</option>
@@ -374,15 +378,15 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
               </select>
             </div>
           </div>
-          <!-- Date Picker Customizado -->
-          <div class="date-picker-container" id="customDatePicker"></div>
-          <!-- Mensagem de estadia mínima -->
-          <div id="minNightsMessage">A estadia mínima é 4 noites</div>
-          <!-- Resumo (exibe datas e preço total) -->
+          <!-- Resumo (exibe datas e preço total) – reposicionado em uma row abaixo dos inputs -->
           <div class="resumo-container" id="resumoContainer">
             <p id="resumoText"></p>
             <span id="toggleDetalhes" class="toggle-detalhes">Ver detalhes</span>
           </div>
+          <!-- Date Picker Customizado (continua absoluto) -->
+          <div class="date-picker-container" id="customDatePicker"></div>
+          <!-- Mensagem de estadia mínima -->
+          <div id="minNightsMessage">A estadia mínima é 4 noites</div>
           <!-- Breakdown (detalhamento dos preços) -->
           <div class="breakdown-container" id="breakdownContainer">
             <p id="breakdownText"></p>
@@ -497,7 +501,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       const monthNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho",
                           "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
       const title = document.createElement("span");
-      title.textContent = `${monthNames[month]} ${year}`;
+      title.textContent = monthNames[month] + " " + year;
       headerDiv.appendChild(title);
       const nextBtn = document.createElement("button");
       nextBtn.className = "nav-button";
@@ -580,7 +584,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       const hoveredDate = new Date(currentHoveredDate);
       let start = checkinDate;
       let end = hoveredDate;
-      if (hoveredDate < checkinDate) { // se estiver invertido, nada realça
+      if (hoveredDate < checkinDate) {
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
         minNightsMessage.style.display = "none";
         return;
@@ -603,7 +607,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     // Converte YYYY-MM-DD para DD/MM/AAAA
     function formatDate(dateStr) {
       const parts = dateStr.split("-");
-      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      return parts[2] + "/" + parts[1] + "/" + parts[0];
     }
     function handleDateSelection(dateStr) {
       if (selectedCheckin && !selectedCheckout) {
@@ -656,13 +660,12 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         const cleaningFee = 50;
         let discount = (nights > 7) ? 0.04 * nightsCost : 0;
         const total = nightsCost - discount + cleaningFee;
-        breakdownText.innerHTML = `
-          <p><strong>Noites:</strong> ${nights} x 120€ = ${nightsCost.toFixed(2)}€</p>
-          ${discount > 0 ? `<p><strong>Desconto semanal:</strong> -${discount.toFixed(2)}€</p>` : ""}
-          <p><strong>Taxa de Limpeza:</strong> 50€</p>
-          <hr>
-          <p><strong>Total:</strong> ${total.toFixed(2)}€</p>
-        `;
+        breakdownText.innerHTML = 
+          `<p><strong>Noites:</strong> ${nights} x 120€ = ${nightsCost.toFixed(2)}€</p>` +
+          (discount > 0 ? `<p><strong>Desconto semanal:</strong> -${discount.toFixed(2)}€</p>` : "") +
+          `<p><strong>Taxa de Limpeza:</strong> 50€</p>
+           <hr>
+           <p><strong>Total:</strong> ${total.toFixed(2)}€</p>`;
         breakdownContainer.style.display = "block";
         toggleDetalhes.textContent = "Ocultar";
       }
