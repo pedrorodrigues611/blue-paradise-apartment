@@ -183,19 +183,6 @@
       appearance: none;
       cursor: pointer;
     }
-    /* Resumo (total) em row separada */
-    .resumo-container {
-      display: block;
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      background: #f1f1f1;
-      border-radius: 6px;
-    }
-    .resumo-container p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
     /* ========== Date Picker Customizado ========== */
     .date-picker-container {
       background: #fff;
@@ -258,7 +245,7 @@
       background-color: var(--primary-color) !important;
       color: #fff !important;
     }
-    /* Mensagem de estadia mínima (posição: acima do grid) */
+    /* Mensagem de estadia mínima (inserida dinamicamente acima do grid) */
     #minNightsMessage {
       display: none;
       margin-bottom: 5px;
@@ -267,6 +254,20 @@
       color: #fff;
       text-align: center;
       border-radius: 5px;
+      font-size: 14px;
+    }
+    /* Resumo e Breakdown */
+    .resumo-container,
+    .breakdown-container {
+      margin-top: 15px;
+      padding: 10px;
+      background: #f1f1f1;
+      border-radius: 6px;
+      display: none;
+    }
+    .resumo-container p,
+    .breakdown-container p {
+      margin: 5px 0;
       font-size: 14px;
     }
     /* Link para "Ver detalhes / Ocultar" */
@@ -367,7 +368,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
             </div>
             <!-- Campo para selecionar nº de pessoas -->
             <div class="booking-input booking-guests" id="bookingGuestsInput">
-              <!-- Novo ícone de pessoa -->
               <img src="https://img.icons8.com/fluency-systems-regular/48/000000/user.png" alt="Ícone de pessoa">
               <select id="guests">
                 <option value="1" selected>1</option>
@@ -377,15 +377,15 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
               </select>
             </div>
           </div>
-          <!-- Resumo (exibe datas e preço total) em nova row -->
+          <!-- Date Picker Customizado -->
+          <div class="date-picker-container" id="customDatePicker"></div>
+          <!-- Resumo (exibe datas e preço total) – permanece oculto até que os dias sejam selecionados -->
           <div class="resumo-container" id="resumoContainer">
             <p id="resumoText"></p>
             <span id="toggleDetalhes" class="toggle-detalhes">Ver detalhes</span>
           </div>
-          <!-- Date Picker Customizado (continua absoluto) -->
-          <div class="date-picker-container" id="customDatePicker"></div>
           <!-- Breakdown (detalhamento dos preços) -->
-          <div class="breakdown-container" id="breakdownContainer" style="display:none;">
+          <div class="breakdown-container" id="breakdownContainer">
             <p id="breakdownText"></p>
           </div>
           <!-- Botão Reservar -->
@@ -460,12 +460,21 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
      ****************************************************/
     let currentCalendarYear, currentCalendarMonth;
     let currentHoveredDate = null;
-    const bookingDateInput = document.getElementById("bookingDateInput");
-    const datePickerContainer = document.getElementById("customDatePicker");
-    const minNightsMessage = document.getElementById("minNightsMessage");
     let selectedCheckin = null, selectedCheckout = null;
     let bookedDatesGlobal = [];
-    // Ao clicar no input de datas, inicializa o calendário para o mês atual
+    // Declaramos a variável global para a mensagem de estadia mínima
+    let minNightsMessage;
+    
+    const bookingDateInput = document.getElementById("bookingDateInput");
+    const datePickerContainer = document.getElementById("customDatePicker");
+    const resumoContainer = document.getElementById("resumoContainer");
+    const resumoText = document.getElementById("resumoText");
+    const toggleDetalhes = document.getElementById("toggleDetalhes");
+    const breakdownContainer = document.getElementById("breakdownContainer");
+    const breakdownText = document.getElementById("breakdownText");
+    const reserveBtn = document.getElementById("reserveBtn");
+    
+    // Ao clicar no input de datas, alterna a exibição do calendário
     bookingDateInput.addEventListener("click", () => {
       if (datePickerContainer.style.display === "none" || datePickerContainer.style.display === "") {
         datePickerContainer.style.display = "block";
@@ -477,9 +486,19 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         datePickerContainer.style.display = "none";
       }
     });
+    
     async function generateCalendar(year, month) {
       if (bookedDatesGlobal.length === 0) { bookedDatesGlobal = await getBookedDates(); }
+      // Limpa o conteúdo do container do calendário
       datePickerContainer.innerHTML = "";
+      
+      // Cria e adiciona a mensagem de estadia mínima (ficará acima do grid)
+      minNightsMessage = document.createElement("div");
+      minNightsMessage.id = "minNightsMessage";
+      minNightsMessage.style.display = "none";
+      minNightsMessage.textContent = "A estadia mínima é 4 noites";
+      datePickerContainer.appendChild(minNightsMessage);
+      
       // Cabeçalho com navegação
       const headerDiv = document.createElement("div");
       headerDiv.className = "date-picker-header";
@@ -515,16 +534,15 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       });
       headerDiv.appendChild(nextBtn);
       datePickerContainer.appendChild(headerDiv);
-      // Insere a mensagem de estadia mínima (acima do grid)
-      datePickerContainer.appendChild(minNightsMessage);
+      
       // Grid de dias da semana
       const gridDiv = document.createElement("div");
       gridDiv.className = "date-picker-grid";
       const daysOfWeek = ["D","S","T","Q","Q","S","S"];
-      daysOfWeek.forEach(d => { 
-        const cell = document.createElement("div"); 
-        cell.style.fontWeight = "bold"; 
-        cell.textContent = d; 
+      daysOfWeek.forEach(d => {
+        const cell = document.createElement("div");
+        cell.style.fontWeight = "bold";
+        cell.textContent = d;
         gridDiv.appendChild(cell);
       });
       let firstDay = new Date(year, month, 1);
@@ -545,14 +563,13 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
             currentHoveredDate = null;
             generateCalendar(currentCalendarYear, currentCalendarMonth);
             document.querySelector("#bookingDateInput span").textContent = "Selecione datas";
-            document.getElementById("resumoContainer").style.display = "none";
-            document.getElementById("breakdownContainer").style.display = "none";
-            document.getElementById("reserveBtn").style.display = "none";
+            resumoContainer.style.display = "none";
+            breakdownContainer.style.display = "none";
+            reserveBtn.style.display = "none";
           });
         } else if (bookedDatesGlobal.includes(dateStr)) {
           cell.classList.add("disabled-day");
         } else {
-          // Ao passar o mouse: se já foi definido checkin, atualiza currentHoveredDate e verifica a faixa
           cell.addEventListener("mouseover", function() {
             if (selectedCheckin && !selectedCheckout) {
               currentHoveredDate = dateStr;
@@ -569,7 +586,8 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
       datePickerContainer.appendChild(gridDiv);
     }
-    // Atualiza os destaques na faixa de datas e exibe mensagem se não cumprir 4 noites
+    
+    // Atualiza os destaques na faixa de datas e exibe a mensagem se não atingir 4 noites
     function updateCalendarHighlights() {
       const dayCells = datePickerContainer.querySelectorAll(".date-picker-day");
       if (!selectedCheckin || !currentHoveredDate) {
@@ -586,7 +604,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
       const potentialNights = (hoveredDate - checkinDate) / (1000 * 3600 * 24);
       if (potentialNights < 4) {
-        // Não realça a faixa e exibe a mensagem
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
         minNightsMessage.style.display = "block";
         minNightsMessage.textContent = "A estadia mínima é 4 noites";
@@ -602,16 +619,18 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         });
       }
     }
+    
     // Converte YYYY-MM-DD para DD/MM/AAAA
     function formatDate(dateStr) {
       const parts = dateStr.split("-");
       return parts[2] + "/" + parts[1] + "/" + parts[0];
     }
+    
     function handleDateSelection(dateStr) {
       if (selectedCheckin && !selectedCheckout) {
         const nights = (new Date(dateStr) - new Date(selectedCheckin)) / (1000 * 3600 * 24);
         if (nights < 4) { 
-          // Se a estadia não atingir 4 noites, não atualiza a seleção
+          // Se a estadia não atingir 4 noites, não altera a seleção
           return; 
         }
         selectedCheckout = dateStr;
@@ -623,16 +642,16 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
       generateCalendar(currentCalendarYear, currentCalendarMonth);
     }
+    
     function calculateNights(checkin, checkout) {
       const cIn = new Date(checkin);
       const cOut = new Date(checkout);
       return (cOut - cIn) / (1000 * 3600 * 24);
     }
+    
     /****************************************************
      * RESUMO E BREAKDOWN
      ****************************************************/
-    const resumoContainer = document.getElementById("resumoContainer");
-    const resumoText = document.getElementById("resumoText");
     function showResumo() {
       const nights = calculateNights(selectedCheckin, selectedCheckout);
       const baseRate = 120;
@@ -643,13 +662,12 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       resumoText.textContent = `${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)} | Total: ${total.toFixed(2)}€`;
       resumoContainer.style.display = "block";
       document.querySelector("#bookingDateInput span").textContent = `${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)}`;
-      document.getElementById("reserveBtn").style.display = "block";
-      document.getElementById("toggleDetalhes").textContent = "Ver detalhes";
-      document.getElementById("breakdownContainer").style.display = "none";
+      reserveBtn.style.display = "block";
+      // "Ver detalhes" só é exibido após a seleção completa
+      toggleDetalhes.textContent = "Ver detalhes";
+      breakdownContainer.style.display = "none";
     }
-    const toggleDetalhes = document.getElementById("toggleDetalhes");
-    const breakdownContainer = document.getElementById("breakdownContainer");
-    const breakdownText = document.getElementById("breakdownText");
+    
     toggleDetalhes.addEventListener("click", () => {
       if (breakdownContainer.style.display === "block") {
         breakdownContainer.style.display = "none";
@@ -671,7 +689,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         toggleDetalhes.textContent = "Ocultar";
       }
     });
-    const reserveBtn = document.getElementById("reserveBtn");
+    
     reserveBtn.addEventListener("click", () => {
       alert("Reserva concluída!\nCheck-in: " + selectedCheckin +
             "\nCheck-out: " + selectedCheckout +
