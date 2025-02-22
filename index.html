@@ -7,7 +7,7 @@
   <!-- CSS Integrado -->
   <style>
     /* ========== CSS BASE ========= */
-    body, h1, p, button, span {
+    body, h1, p, button, span, select {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
@@ -25,7 +25,7 @@
     .container {
       width: 100%;
       max-width: 900px;
-      background-color: white;
+      background-color: #fff;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -53,7 +53,7 @@
       top: 50%;
       transform: translateY(-50%);
       background-color: rgba(0, 0, 0, 0.5);
-      color: white;
+      color: #fff;
       border: none;
       padding: 10px 15px;
       cursor: pointer;
@@ -95,12 +95,14 @@
     .description h1 {
       font-size: 22px;
       color: #333;
+      margin-bottom: 10px;
     }
     
     .description p {
       font-size: 16px;
       color: #666;
       line-height: 1.6;
+      margin-bottom: 10px;
     }
     
     .details p {
@@ -115,7 +117,7 @@
     
     .facilities button {
       background-color: #007bff;
-      color: white;
+      color: #fff;
       border: none;
       padding: 8px 15px;
       cursor: pointer;
@@ -157,12 +159,12 @@
     
     /* ========== Booking Container (Reserva) ========== */
     .booking-container {
-      background: #ffffff;
+      background: #fff;
       border: 1px solid #ddd;
       border-radius: 10px;
       box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
       padding: 20px;
-      position: relative; /* Novo: para posicionar o calendário */
+      position: relative;
     }
     
     .booking-container .price {
@@ -172,69 +174,66 @@
       margin-bottom: 15px;
     }
     
-    .booking-container label {
-      font-weight: bold;
-      display: block;
-      margin-top: 10px;
+    /* Nova linha de inputs para datas e hóspedes */
+    .booking-inputs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
     }
     
-    .booking-container select,
-    .booking-container input[type="date"] {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
+    .booking-input {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
-    }
-    
-    .booking-container button.reserve-btn {
-      width: 100%;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      padding: 10px;
-      font-size: 16px;
       cursor: pointer;
-      margin-top: 15px;
-      border-radius: 5px;
-      transition: background 0.3s;
+      background: #fafafa;
+      transition: border-color 0.3s;
     }
     
-    .booking-container button.reserve-btn:hover {
-      background-color: #218838;
+    .booking-input:hover {
+      border-color: #007bff;
     }
     
-    /* Botão para abrir o Date Picker */
-    .booking-container button#selectDatesBtn {
-      width: 100%;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px;
+    .booking-input i {
+      margin-right: 8px;
+      font-size: 18px;
+      color: #007bff;
+    }
+    
+    .booking-input span {
       font-size: 16px;
+      color: #666;
+    }
+    
+    /* Estilização do select para número de hóspedes */
+    .booking-guests select {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      color: #666;
+      background: transparent;
+      appearance: none;
       cursor: pointer;
-      border-radius: 5px;
-      transition: background 0.3s;
-      margin-top: 10px;
     }
     
-    .booking-container button#selectDatesBtn:hover {
-      background-color: #0056b3;
-    }
-    
-    /* ========== Date Picker Customizado ========== */
+    /* Date Picker Customizado */
     .date-picker-container {
       background: #fff;
       border: 1px solid #ccc;
       border-radius: 6px;
       padding: 10px;
       width: 300px;
-      margin-top: 10px;
       display: none;
       position: absolute;
       z-index: 999;
-      bottom: 100%;  /* Novo: abre acima do container de reserva */
+      bottom: 100%;
       left: 0;
+      margin-bottom: 10px;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
     }
     
     .date-picker-header {
@@ -273,14 +272,14 @@
     
     .selected-day {
       background-color: #28a745;
-      color: white;
+      color: #fff;
     }
     
     .range-day {
       background-color: #c3e6cb;
     }
     
-    /* ========== Resumo e Breakdown ========== */
+    /* Resumo e Breakdown */
     .resumo-container,
     .breakdown-container {
       margin-top: 15px;
@@ -304,21 +303,6 @@
       cursor: pointer;
       text-decoration: underline;
       font-size: 14px;
-    }
-    
-    /* Botão fechar (X) para os containers */
-    .close-btn {
-      background: #ccc;
-      color: #333;
-      border: none;
-      padding: 5px 8px;
-      border-radius: 4px;
-      cursor: pointer;
-      float: right;
-    }
-    
-    .close-btn:hover {
-      background: #bbb;
     }
   </style>
 </head>
@@ -391,36 +375,37 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         <div class="booking-container">
           <div class="price">€120/noite</div>
           
-          <!-- Inputs originais ocultos -->
-          <label for="checkin" style="display:none;">Check-in</label>
-          <input type="date" id="checkin" style="display:none;">
-          <label for="checkout" style="display:none;">Check-out</label>
-          <input type="date" id="checkout" style="display:none;">
-  
-          <!-- Botão para abrir o Date Picker customizado -->
-          <button id="selectDatesBtn">Selecionar Datas</button>
+          <!-- Linha de inputs: Data e Nº de hóspedes -->
+          <div class="booking-inputs">
+            <!-- Campo para selecionar datas -->
+            <div class="booking-input" id="bookingDateInput">
+              <i>&#128197;</i>
+              <span>Selecione datas</span>
+            </div>
+            <!-- Campo para selecionar nº de pessoas -->
+            <div class="booking-input booking-guests" id="bookingGuestsInput">
+              <i>&#128101;</i>
+              <select id="guests">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Date Picker Customizado -->
           <div class="date-picker-container" id="customDatePicker"></div>
-  
-          <!-- Seleção de número de hóspedes -->
-          <label for="guests" style="margin-top:10px;">Nº de hóspedes</label>
-          <select id="guests">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-          </select>
   
           <!-- Resumo (aparece após selecionar datas) -->
           <div class="resumo-container" id="resumoContainer">
-            <span id="closeResumo" class="close-btn">x</span>
             <p id="resumoText"></p>
-            <!-- Link para alternar Ver Detalhes / Ocultar -->
+            <!-- Link para alternar Ver detalhes / Ocultar -->
             <span id="toggleDetalhes" class="toggle-detalhes">Ver detalhes</span>
           </div>
   
           <!-- Breakdown (detalhamento dos preços) -->
           <div class="breakdown-container" id="breakdownContainer">
-            <span id="closeBreakdown" class="close-btn">x</span>
             <p id="breakdownText"></p>
           </div>
   
@@ -507,14 +492,15 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     /****************************************************
      * DATE PICKER CUSTOMIZADO
      ****************************************************/
-    const selectDatesBtn = document.getElementById("selectDatesBtn");
+    // Agora o campo para data é o div com id "bookingDateInput"
+    const bookingDateInput = document.getElementById("bookingDateInput");
     const datePickerContainer = document.getElementById("customDatePicker");
 
     let selectedCheckin = null;
     let selectedCheckout = null;
     let bookedDatesGlobal = [];
 
-    selectDatesBtn.addEventListener("click", () => {
+    bookingDateInput.addEventListener("click", () => {
       if (datePickerContainer.style.display === "none" || datePickerContainer.style.display === "") {
         datePickerContainer.style.display = "block";
         generateCalendar(new Date().getFullYear(), new Date().getMonth());
@@ -626,7 +612,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
      ****************************************************/
     const resumoContainer = document.getElementById("resumoContainer");
     const resumoText = document.getElementById("resumoText");
-    const closeResumo = document.getElementById("closeResumo");
 
     function showResumo() {
       const nights = calculateNights(selectedCheckin, selectedCheckout);
@@ -635,16 +620,13 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       document.getElementById("reserveBtn").style.display = "block";
       document.getElementById("toggleDetalhes").textContent = "Ver detalhes";
       document.getElementById("breakdownContainer").style.display = "none";
+      // Atualiza o placeholder do input de datas para mostrar as datas selecionadas
+      document.querySelector("#bookingDateInput span").textContent = `${selectedCheckin} - ${selectedCheckout}`;
     }
-
-    closeResumo.addEventListener("click", () => {
-      resumoContainer.style.display = "none";
-    });
 
     const toggleDetalhes = document.getElementById("toggleDetalhes");
     const breakdownContainer = document.getElementById("breakdownContainer");
     const breakdownText = document.getElementById("breakdownText");
-    const closeBreakdown = document.getElementById("closeBreakdown");
 
     toggleDetalhes.addEventListener("click", () => {
       if (breakdownContainer.style.display === "block") {
@@ -670,11 +652,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         breakdownContainer.style.display = "block";
         toggleDetalhes.textContent = "Ocultar";
       }
-    });
-
-    closeBreakdown.addEventListener("click", () => {
-      breakdownContainer.style.display = "none";
-      toggleDetalhes.textContent = "Ver detalhes";
     });
 
     const reserveBtn = document.getElementById("reserveBtn");
