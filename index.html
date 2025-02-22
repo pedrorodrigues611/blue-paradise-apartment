@@ -183,6 +183,19 @@
       appearance: none;
       cursor: pointer;
     }
+    /* Resumo (total) em row separada */
+    .resumo-container {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      background: #f1f1f1;
+      border-radius: 6px;
+    }
+    .resumo-container p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
     /* ========== Date Picker Customizado ========== */
     .date-picker-container {
       background: #fff;
@@ -245,29 +258,15 @@
       background-color: var(--primary-color) !important;
       color: #fff !important;
     }
-    /* Mensagem de estadia mínima */
+    /* Mensagem de estadia mínima (posição: acima do grid) */
     #minNightsMessage {
       display: none;
-      margin-top: 5px;
+      margin-bottom: 5px;
       padding: 5px;
       background: var(--primary-color);
       color: #fff;
       text-align: center;
       border-radius: 5px;
-      font-size: 14px;
-    }
-    /* ========== Resumo e Breakdown ========== */
-    .resumo-container,
-    .breakdown-container {
-      margin-top: 15px;
-      padding: 10px;
-      background: #f1f1f1;
-      border-radius: 6px;
-      display: none;
-    }
-    .resumo-container p,
-    .breakdown-container p {
-      margin: 5px 0;
       font-size: 14px;
     }
     /* Link para "Ver detalhes / Ocultar" */
@@ -368,8 +367,8 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
             </div>
             <!-- Campo para selecionar nº de pessoas -->
             <div class="booking-input booking-guests" id="bookingGuestsInput">
-              <!-- Ícone de pessoa atualizado -->
-              <img src="https://img.icons8.com/ios-filled/50/000000/user-male-circle.png" alt="Ícone de pessoa">
+              <!-- Novo ícone de pessoa -->
+              <img src="https://img.icons8.com/fluency-systems-regular/48/000000/user.png" alt="Ícone de pessoa">
               <select id="guests">
                 <option value="1" selected>1</option>
                 <option value="2">2</option>
@@ -378,17 +377,15 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
               </select>
             </div>
           </div>
-          <!-- Resumo (exibe datas e preço total) – reposicionado em uma row abaixo dos inputs -->
+          <!-- Resumo (exibe datas e preço total) em nova row -->
           <div class="resumo-container" id="resumoContainer">
             <p id="resumoText"></p>
             <span id="toggleDetalhes" class="toggle-detalhes">Ver detalhes</span>
           </div>
           <!-- Date Picker Customizado (continua absoluto) -->
           <div class="date-picker-container" id="customDatePicker"></div>
-          <!-- Mensagem de estadia mínima -->
-          <div id="minNightsMessage">A estadia mínima é 4 noites</div>
           <!-- Breakdown (detalhamento dos preços) -->
-          <div class="breakdown-container" id="breakdownContainer">
+          <div class="breakdown-container" id="breakdownContainer" style="display:none;">
             <p id="breakdownText"></p>
           </div>
           <!-- Botão Reservar -->
@@ -518,6 +515,8 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       });
       headerDiv.appendChild(nextBtn);
       datePickerContainer.appendChild(headerDiv);
+      // Insere a mensagem de estadia mínima (acima do grid)
+      datePickerContainer.appendChild(minNightsMessage);
       // Grid de dias da semana
       const gridDiv = document.createElement("div");
       gridDiv.className = "date-picker-grid";
@@ -553,7 +552,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         } else if (bookedDatesGlobal.includes(dateStr)) {
           cell.classList.add("disabled-day");
         } else {
-          // Mouseover: atualiza global currentHoveredDate e realça a faixa
+          // Ao passar o mouse: se já foi definido checkin, atualiza currentHoveredDate e verifica a faixa
           cell.addEventListener("mouseover", function() {
             if (selectedCheckin && !selectedCheckout) {
               currentHoveredDate = dateStr;
@@ -569,10 +568,8 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         gridDiv.appendChild(cell);
       }
       datePickerContainer.appendChild(gridDiv);
-      // Adiciona o aviso de estadia mínima
-      datePickerContainer.appendChild(minNightsMessage);
     }
-    // Atualiza os destaques na faixa de datas
+    // Atualiza os destaques na faixa de datas e exibe mensagem se não cumprir 4 noites
     function updateCalendarHighlights() {
       const dayCells = datePickerContainer.querySelectorAll(".date-picker-day");
       if (!selectedCheckin || !currentHoveredDate) {
@@ -582,26 +579,27 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
       const checkinDate = new Date(selectedCheckin);
       const hoveredDate = new Date(currentHoveredDate);
-      let start = checkinDate;
-      let end = hoveredDate;
       if (hoveredDate < checkinDate) {
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
         minNightsMessage.style.display = "none";
         return;
       }
       const potentialNights = (hoveredDate - checkinDate) / (1000 * 3600 * 24);
-      dayCells.forEach(cell => {
-        const cellDate = new Date(cell.dataset.date);
-        if (cellDate >= checkinDate && cellDate <= hoveredDate) {
-          cell.classList.add("hover-range");
-        } else {
-          cell.classList.remove("hover-range");
-        }
-      });
       if (potentialNights < 4) {
+        // Não realça a faixa e exibe a mensagem
+        dayCells.forEach(cell => cell.classList.remove("hover-range"));
         minNightsMessage.style.display = "block";
+        minNightsMessage.textContent = "A estadia mínima é 4 noites";
       } else {
         minNightsMessage.style.display = "none";
+        dayCells.forEach(cell => {
+          const cellDate = new Date(cell.dataset.date);
+          if (cellDate >= checkinDate && cellDate <= hoveredDate) {
+            cell.classList.add("hover-range");
+          } else {
+            cell.classList.remove("hover-range");
+          }
+        });
       }
     }
     // Converte YYYY-MM-DD para DD/MM/AAAA
@@ -612,7 +610,10 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     function handleDateSelection(dateStr) {
       if (selectedCheckin && !selectedCheckout) {
         const nights = (new Date(dateStr) - new Date(selectedCheckin)) / (1000 * 3600 * 24);
-        if (nights < 4) { return; }
+        if (nights < 4) { 
+          // Se a estadia não atingir 4 noites, não atualiza a seleção
+          return; 
+        }
         selectedCheckout = dateStr;
         datePickerContainer.style.display = "none";
         showResumo();
