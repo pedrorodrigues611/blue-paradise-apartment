@@ -28,7 +28,7 @@
       background-color: #fff;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
       position: relative;
     }
     
@@ -52,7 +52,7 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0,0,0,0.5);
       color: #fff;
       border: none;
       padding: 10px 15px;
@@ -66,7 +66,7 @@
     .image-gallery .next { right: 10px; }
     
     .image-gallery button:hover {
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: rgba(0,0,0,0.8);
     }
     
     /* ========== Conteúdo em 2 colunas (Informações / Reserva) ========== */
@@ -76,13 +76,8 @@
       margin-top: 20px;
     }
     
-    .left-column {
-      flex: 2;
-    }
-    
-    .right-column {
-      flex: 1;
-    }
+    .left-column { flex: 2; }
+    .right-column { flex: 1; }
     
     /* ========== Informações da Casa ========== */
     .description {
@@ -174,7 +169,7 @@
       margin-bottom: 15px;
     }
     
-    /* Nova linha de inputs para datas e hóspedes */
+    /* Linha de inputs para data e nº de pessoas */
     .booking-inputs {
       display: flex;
       gap: 10px;
@@ -188,8 +183,8 @@
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
-      cursor: pointer;
       background: #fafafa;
+      cursor: pointer;
       transition: border-color 0.3s;
     }
     
@@ -197,10 +192,11 @@
       border-color: #007bff;
     }
     
-    .booking-input i {
+    /* Ícones (usando imagens de ícones do icons8) */
+    .booking-input img {
+      width: 20px;
+      height: 20px;
       margin-right: 8px;
-      font-size: 18px;
-      color: #007bff;
     }
     
     .booking-input span {
@@ -208,7 +204,7 @@
       color: #666;
     }
     
-    /* Estilização do select para número de hóspedes */
+    /* Estilização do select (para Nº de pessoas) */
     .booking-guests select {
       width: 100%;
       border: none;
@@ -220,7 +216,7 @@
       cursor: pointer;
     }
     
-    /* Date Picker Customizado */
+    /* ========== Date Picker Customizado ========== */
     .date-picker-container {
       background: #fff;
       border: 1px solid #ccc;
@@ -242,6 +238,14 @@
       align-items: center;
       margin-bottom: 10px;
       font-weight: bold;
+    }
+    
+    .nav-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: #007bff;
     }
     
     .date-picker-grid {
@@ -279,7 +283,7 @@
       background-color: #c3e6cb;
     }
     
-    /* Resumo e Breakdown */
+    /* ========== Resumo e Breakdown ========== */
     .resumo-container,
     .breakdown-container {
       margin-top: 15px;
@@ -303,6 +307,24 @@
       cursor: pointer;
       text-decoration: underline;
       font-size: 14px;
+    }
+    
+    /* Botão Reservar (azul conforme print) */
+    .reserve-btn {
+      width: 100%;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 15px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    
+    .reserve-btn:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
@@ -375,16 +397,16 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         <div class="booking-container">
           <div class="price">€120/noite</div>
           
-          <!-- Linha de inputs: Data e Nº de hóspedes -->
+          <!-- Linha de inputs: Data e Nº de pessoas -->
           <div class="booking-inputs">
             <!-- Campo para selecionar datas -->
             <div class="booking-input" id="bookingDateInput">
-              <i>&#128197;</i>
+              <img src="https://img.icons8.com/fluency/48/000000/calendar.png" alt="Calendário">
               <span>Selecione datas</span>
             </div>
             <!-- Campo para selecionar nº de pessoas -->
             <div class="booking-input booking-guests" id="bookingGuestsInput">
-              <i>&#128101;</i>
+              <img src="https://img.icons8.com/fluency/48/000000/user.png" alt="Pessoa">
               <select id="guests">
                 <option value="1" selected>1</option>
                 <option value="2">2</option>
@@ -459,6 +481,12 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
           amenitiesList.style.display = "none";
         }
       });
+
+      // Para que toda a área do "nº pessoas" seja clicável
+      const bookingGuestsInput = document.getElementById("bookingGuestsInput");
+      bookingGuestsInput.addEventListener("click", function() {
+        document.getElementById("guests").focus();
+      });
     });
 
     /****************************************************
@@ -466,7 +494,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
      ****************************************************/
     const calendarId1 = "c4qe8v081ip4g6hfb5v5i99j9jfafsfb@import.calendar.google.com";
     const calendarId2 = "gq3m477imq71fcv56kojh45833nphv7r@import.calendar.google.com";
-    const apiKey = "SUA_API_KEY"; // Substituir pela sua API Key
+    const apiKey = "SUA_API_KEY"; // Substitua pela sua API Key
 
     async function getBookedDates() {
       let events = [];
@@ -490,9 +518,10 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     }
 
     /****************************************************
-     * DATE PICKER CUSTOMIZADO
+     * DATE PICKER CUSTOMIZADO COM NAVEGAÇÃO
      ****************************************************/
-    // Agora o campo para data é o div com id "bookingDateInput"
+    // Variáveis para armazenar o mês/ano atualmente exibidos
+    let currentCalendarYear, currentCalendarMonth;
     const bookingDateInput = document.getElementById("bookingDateInput");
     const datePickerContainer = document.getElementById("customDatePicker");
 
@@ -500,10 +529,14 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     let selectedCheckout = null;
     let bookedDatesGlobal = [];
 
+    // Ao clicar no input de datas, inicializa o calendário para o mês atual
     bookingDateInput.addEventListener("click", () => {
       if (datePickerContainer.style.display === "none" || datePickerContainer.style.display === "") {
         datePickerContainer.style.display = "block";
-        generateCalendar(new Date().getFullYear(), new Date().getMonth());
+        const today = new Date();
+        currentCalendarYear = today.getFullYear();
+        currentCalendarMonth = today.getMonth();
+        generateCalendar(currentCalendarYear, currentCalendarMonth);
       } else {
         datePickerContainer.style.display = "none";
       }
@@ -515,19 +548,67 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
       datePickerContainer.innerHTML = "";
 
+      // Cabeçalho com botões de navegação
       const headerDiv = document.createElement("div");
       headerDiv.className = "date-picker-header";
 
+      // Botão para retroceder (desabilitar se for o mês atual)
+      const prevBtn = document.createElement("button");
+      prevBtn.className = "nav-button";
+      prevBtn.innerHTML = "&#10094;";
+      prevBtn.addEventListener("click", () => {
+        // Impede retroceder para meses anteriores a hoje
+        const today = new Date();
+        if (year > today.getFullYear() || (year === today.getFullYear() && month > today.getMonth())) {
+          // Retrocede 1 mês
+          if (month === 0) {
+            month = 11;
+            year--;
+          } else {
+            month--;
+          }
+          currentCalendarYear = year;
+          currentCalendarMonth = month;
+          generateCalendar(year, month);
+        }
+      });
+      headerDiv.appendChild(prevBtn);
+
+      // Título com o nome do mês e ano
       const monthNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho",
                           "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
       const title = document.createElement("span");
       title.textContent = `${monthNames[month]} ${year}`;
       headerDiv.appendChild(title);
+
+      // Botão para avançar (permitir até 1 ano a partir do mês atual)
+      const nextBtn = document.createElement("button");
+      nextBtn.className = "nav-button";
+      nextBtn.innerHTML = "&#10095;";
+      nextBtn.addEventListener("click", () => {
+        const today = new Date();
+        // Permite avançar enquanto o mês atual + 12 não for ultrapassado
+        const maxDate = new Date(today.getFullYear(), today.getMonth() + 12, 1);
+        const currentDisplayed = new Date(year, month, 1);
+        if (currentDisplayed < maxDate) {
+          if (month === 11) {
+            month = 0;
+            year++;
+          } else {
+            month++;
+          }
+          currentCalendarYear = year;
+          currentCalendarMonth = month;
+          generateCalendar(year, month);
+        }
+      });
+      headerDiv.appendChild(nextBtn);
+
       datePickerContainer.appendChild(headerDiv);
 
+      // Grid de dias da semana
       const gridDiv = document.createElement("div");
       gridDiv.className = "date-picker-grid";
-
       const daysOfWeek = ["D","S","T","Q","Q","S","S"];
       daysOfWeek.forEach(d => {
         const cell = document.createElement("div");
@@ -536,56 +617,75 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         gridDiv.appendChild(cell);
       });
 
+      // Primeiro dia do mês
       let firstDay = new Date(year, month, 1);
       let startDay = firstDay.getDay();
-
       for (let i = 0; i < startDay; i++) {
         const emptyCell = document.createElement("div");
         gridDiv.appendChild(emptyCell);
       }
 
-      const daysInMonth = new Date(year, month+1, 0).getDate();
-
+      // Número de dias no mês
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
       for (let day = 1; day <= daysInMonth; day++) {
         const cell = document.createElement("div");
         cell.className = "date-picker-day";
         cell.textContent = day;
-
         const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-
-        if (bookedDatesGlobal.includes(dateStr)) {
-          cell.classList.add("disabled-day");
-        } else {
-          cell.addEventListener("click", () => handleDateSelection(dateStr, cell));
-        }
-
+        
+        // Se a data já estiver selecionada, ao clicar nela, deseleciona
         if (selectedCheckin === dateStr || selectedCheckout === dateStr) {
           cell.classList.add("selected-day");
-        } else if (isInRange(dateStr, selectedCheckin, selectedCheckout)) {
-          cell.classList.add("range-day");
+          cell.addEventListener("click", () => {
+            // Deselect se já selecionado
+            selectedCheckin = null;
+            selectedCheckout = null;
+            generateCalendar(currentCalendarYear, currentCalendarMonth);
+            // Também atualiza o placeholder do input de datas
+            document.querySelector("#bookingDateInput span").textContent = "Selecione datas";
+            // Esconde resumo e breakdown
+            document.getElementById("resumoContainer").style.display = "none";
+            document.getElementById("breakdownContainer").style.display = "none";
+            document.getElementById("reserveBtn").style.display = "none";
+          });
+        } else if (bookedDatesGlobal.includes(dateStr)) {
+          cell.classList.add("disabled-day");
+        } else {
+          cell.addEventListener("click", () => handleDateSelection(dateStr));
         }
         gridDiv.appendChild(cell);
       }
       datePickerContainer.appendChild(gridDiv);
     }
 
-    function isInRange(dateStr, checkin, checkout) {
-      if (!checkin || !checkout) return false;
-      const d = new Date(dateStr);
-      const cIn = new Date(checkin);
-      const cOut = new Date(checkout);
-      return d >= cIn && d <= cOut;
+    // Função para converter data do formato YYYY-MM-DD para DD/MM/AAAA
+    function formatDate(dateStr) {
+      const parts = dateStr.split("-");
+      return `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
 
-    function handleDateSelection(dateStr, cell) {
+    function handleDateSelection(dateStr) {
+      // Se clicado num dia já selecionado, deseleciona
+      if (selectedCheckin === dateStr || selectedCheckout === dateStr) {
+        selectedCheckin = null;
+        selectedCheckout = null;
+        generateCalendar(currentCalendarYear, currentCalendarMonth);
+        document.querySelector("#bookingDateInput span").textContent = "Selecione datas";
+        document.getElementById("resumoContainer").style.display = "none";
+        document.getElementById("breakdownContainer").style.display = "none";
+        document.getElementById("reserveBtn").style.display = "none";
+        return;
+      }
+      // Se nenhum dia foi selecionado ainda, define como check-in
       if (!selectedCheckin) {
         selectedCheckin = dateStr;
-        selectedCheckout = null;
       } else if (!selectedCheckout) {
+        // Se o novo dia é anterior ao check-in, emite alerta
         if (new Date(dateStr) <= new Date(selectedCheckin)) {
           alert("O checkout deve ser depois do check-in!");
           return;
         }
+        // Verifica mínimo de 4 noites
         const nights = calculateNights(selectedCheckin, dateStr);
         if (nights < 4) {
           alert("É necessário um mínimo de 4 noites.");
@@ -595,10 +695,11 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         datePickerContainer.style.display = "none";
         showResumo();
       } else {
+        // Se ambos já estavam selecionados, reinicia e define novo check-in
         selectedCheckin = dateStr;
         selectedCheckout = null;
       }
-      generateCalendar(new Date().getFullYear(), new Date().getMonth());
+      generateCalendar(currentCalendarYear, currentCalendarMonth);
     }
 
     function calculateNights(checkin, checkout) {
@@ -614,14 +715,14 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     const resumoText = document.getElementById("resumoText");
 
     function showResumo() {
-      const nights = calculateNights(selectedCheckin, selectedCheckout);
-      resumoText.textContent = `Selecionaste ${nights} noites: de ${selectedCheckin} até ${selectedCheckout}.`;
+      // Exibe apenas os dias formatados
+      resumoText.textContent = `${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)}`;
       resumoContainer.style.display = "block";
       document.getElementById("reserveBtn").style.display = "block";
       document.getElementById("toggleDetalhes").textContent = "Ver detalhes";
       document.getElementById("breakdownContainer").style.display = "none";
-      // Atualiza o placeholder do input de datas para mostrar as datas selecionadas
-      document.querySelector("#bookingDateInput span").textContent = `${selectedCheckin} - ${selectedCheckout}`;
+      // Atualiza o placeholder do input de datas
+      document.querySelector("#bookingDateInput span").textContent = `${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)}`;
     }
 
     const toggleDetalhes = document.getElementById("toggleDetalhes");
