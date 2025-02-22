@@ -10,7 +10,7 @@
       --primary-hover: #16303a;
     }
     /* ========== CSS BASE ========= */
-    body, h1, p, button, span, select {
+    body, h1, h2, h3, p, button, span, select {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
@@ -72,30 +72,43 @@
     }
     .left-column { flex: 2; }
     .right-column { flex: 1; }
-    /* ========== Informações da Casa ========== */
+    /* ========== Informações da Casa – Descrição e detalhes ========== */
     .description {
+      color: var(--primary-color);
       padding: 15px;
       background-color: #f9f9f9;
       border-radius: 10px;
       margin-bottom: 15px;
     }
-    .description h1 {
-      font-size: 22px;
-      color: #333;
-      margin-bottom: 10px;
+    .description h1,
+    .description h2,
+    .description h3 {
+      color: var(--primary-color);
     }
     .description p {
       font-size: 16px;
-      color: #666;
       line-height: 1.6;
       margin-bottom: 10px;
     }
     .details p {
       font-size: 16px;
-      color: #666;
+      color: var(--primary-color);
       margin-bottom: 10px;
     }
-    .facilities { margin-bottom: 10px; }
+    /* Separadores */
+    hr {
+      border: 0;
+      border-top: 1px solid #ccc;
+      margin: 10px 0;
+    }
+    /* ========== Comodidades ========== */
+    .facilities {
+      margin-bottom: 10px;
+    }
+    .facilities p {
+      font-size: 16px;
+      color: var(--primary-color);
+    }
     .facilities button {
       background-color: var(--primary-color);
       color: #fff;
@@ -114,14 +127,17 @@
       padding: 10px;
       border-radius: 5px;
     }
-    .rules {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 15px;
+    /* ========== Regras da Casa ========== */
+    .rules, .rules p {
+      font-size: 16px;
+      color: var(--primary-color);
     }
-    /* Calendário do Google */
+    /* ========== Calendário (Disponibilidade) ========== */
+    .calendar h3 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
     .calendar {
-      margin-top: 15px;
       text-align: center;
     }
     .calendar iframe {
@@ -129,6 +145,14 @@
       height: 400px;
       border: none;
       border-radius: 5px;
+    }
+    /* ========== Área de Comentários ========== */
+    .comments, .comments p {
+      color: var(--primary-color);
+      font-size: 16px;
+    }
+    .comments .review {
+      margin-bottom: 15px;
     }
     /* ========== Booking Container (Reserva) ========== */
     .booking-container {
@@ -245,7 +269,7 @@
       background-color: var(--primary-color) !important;
       color: #fff !important;
     }
-    /* Mensagem de estadia mínima – sem ocupar toda a largura */
+    /* Aviso de estadia mínima – width ajustada ao conteúdo */
     #minNightsMessage {
       display: none;
       padding: 5px 10px;
@@ -257,7 +281,7 @@
       position: absolute;
       white-space: nowrap;
     }
-    /* Resumo e Breakdown */
+    /* ========== Resumo e Breakdown (Reserva) ========== */
     .resumo-container,
     .breakdown-container {
       margin-top: 15px;
@@ -313,46 +337,60 @@
         <div class="description">
           <h1>Blue Paradise Apartment by Hoperty</h1>
           <p>
-            O Blue Paradise Apartment está localizado no Caniço. Este apartamento é novo, espaçoso e moderno, com muita luz natural, vista parcial para o mar e um amplo pátio.
-            Está bem localizado: restaurantes, padarias e bares a poucos passos, praia a 5 minutos a pé, Funchal a 10 minutos de carro e próximo do aeroporto.
-            Supermercado e cafeteria no mesmo prédio.
+            O Blue Paradise Apartment encontra-se localizado no Caniço. Este apartamento é novo, espaçoso e moderno, com muita luz natural, vista parcial para o mar e um amplo pátio.
           </p>
           <p>
-            ✔ 2 Quartos confortáveis <br>
-            ✔ 2 Banheiros modernos <br>
-            ✔ Cozinha totalmente equipada <br>
-            ✔ Wi-Fi gratuito e TV a cabo <br>
-            ✔ Sacada com vista incrível <br>
-            ✔ Localização privilegiada
+            Está bem localizado: restaurantes, pastelarias e bares a poucos passos, praia a 5 minutos a pé, Funchal a 10 minutos de carro e próximo do aeroporto.<br>
+            Supermercado e cafetaria no mesmo prédio.
           </p>
         </div>
         <div class="details">
-          <p>Funchal - 4 hóspedes - 2 quartos - 2 banheiros</p>
+          <p>Funchal - 4 hóspedes - 2 quartos - 2 casas de banho</p>
+          <hr>
           <div class="facilities">
             <p>🍽 Cozinha &nbsp; 🔥 Forno &nbsp; 🌿 Jardim</p>
             <button id="show-amenities">Mostrar todas as 10 comodidades</button>
             <div id="amenities-list" style="display:none;">
-              <p>✔ Wi-Fi rápido &nbsp; ✔ Ar Condicionado &nbsp; ✔ Máquina de Lavar</p>
+              <p>✔ Wi‑Fi rápido &nbsp; ✔ Ar Condicionado &nbsp; ✔ Máquina de Lavar</p>
               <p>✔ Piscina &nbsp; ✔ TV a Cabo &nbsp; ✔ Estacionamento</p>
             </div>
           </div>
+          <hr>
+          <h2>Regras da casa</h2>
           <div class="rules">
             <p>✔ Check-in: 15h &nbsp; ✔ Check-out: 11h</p>
-            <p>✔ Crianças permitido &nbsp; ❌ Fumar não permitido</p>
+            <p>✔ Crianças permitidas &nbsp; ✔ Bebés permitidos &nbsp; ❌ Fumar não permitido &nbsp; ❌ Festas não permitidas</p>
           </div>
-          <!-- Calendário do Google -->
+          <hr>
           <div class="calendar">
             <h3>Disponibilidade</h3>
             <iframe src="https://calendar.google.com/calendar/embed?
 src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
-&src=gq3m477imq71fcv56kojh45833nphv7r%40import.calendar.google.com
-&ctz=Europe%2FLisbon" 
+&amp;src=gq3m477imq71fcv56kojh45833nphv7r%40import.calendar.google.com
+&amp;ctz=Europe%2FLisbon" 
                     style="border: 0" 
                     width="100%" 
                     height="400" 
                     frameborder="0" 
                     scrolling="no">
             </iframe>
+          </div>
+          <hr>
+          <h2>Comentários</h2>
+          <div class="comments">
+            <div class="review">
+              <p>
+                <strong>Aleksandra <img src="https://img.icons8.com/color/24/000000/union-jack.png" alt="UK Flag"></strong>
+              </p>
+              <p>
+                <img src="https://img.icons8.com/fluency/24/000000/star.png" alt="Star">
+                <img src="https://img.icons8.com/fluency/24/000000/star.png" alt="Star">
+                <img src="https://img.icons8.com/fluency/24/000000/star.png" alt="Star">
+                <img src="https://img.icons8.com/fluency/24/000000/star.png" alt="Star">
+                <img src="https://img.icons8.com/fluency/24/000000/star.png" alt="Star">
+              </p>
+              <p>Loved the staying!</p>
+            </div>
           </div>
         </div>
       </div>
@@ -380,7 +418,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
           </div>
           <!-- Date Picker Customizado -->
           <div class="date-picker-container" id="customDatePicker"></div>
-          <!-- Resumo (exibe datas e preço total) – permanece oculto até que os dias sejam selecionados -->
+          <!-- Resumo (exibe datas e preço total) – o total aparece numa row abaixo das datas -->
           <div class="resumo-container" id="resumoContainer">
             <p id="resumoText"></p>
             <span id="toggleDetalhes" class="toggle-detalhes">Ver detalhes</span>
@@ -497,7 +535,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       minNightsMessage = document.createElement("div");
       minNightsMessage.id = "minNightsMessage";
       minNightsMessage.textContent = "A estadia mínima é 4 noites";
-      // Já aplica o estilo via CSS (display inline-block para width automática)
       datePickerContainer.appendChild(minNightsMessage);
       
       // Cabeçalho com navegação
@@ -591,7 +628,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     // Atualiza os destaques e reposiciona o aviso, se necessário
     function updateCalendarHighlights() {
       const dayCells = datePickerContainer.querySelectorAll(".date-picker-day");
-      // Se não houver seleção de check-in ou nenhum dia estiver sendo "hovered", oculta o aviso
       if (!selectedCheckin || !currentHoveredDate) {
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
         minNightsMessage.style.display = "none";
@@ -599,7 +635,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
       const checkinDate = new Date(selectedCheckin);
       const hoveredDate = new Date(currentHoveredDate);
-      // Se o dia "hovered" for anterior ao check-in, desmarca e oculta o aviso
       if (hoveredDate < checkinDate) {
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
         minNightsMessage.style.display = "none";
@@ -607,13 +642,11 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
       const potentialNights = (hoveredDate - checkinDate) / (1000 * 3600 * 24);
       if (potentialNights < 4) {
-        // Não realça a faixa e exibe o aviso reposicionado acima da linha da célula "hovered"
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
         const hoveredCell = datePickerContainer.querySelector(`[data-date="${currentHoveredDate}"]`);
         if (hoveredCell) {
-          // Posiciona o aviso uma linha acima: subtrai a altura da célula (30px) e o gap (5px)
+          // Calcula a posição: reposiciona o aviso uma linha acima da linha do hoveredCell
           let newTop = hoveredCell.offsetTop - hoveredCell.offsetHeight - 5;
-          // Se o cálculo resultar em valor negativo, usa 0
           newTop = newTop < 0 ? 0 : newTop;
           minNightsMessage.style.left = hoveredCell.offsetLeft + "px";
           minNightsMessage.style.top = newTop + "px";
@@ -621,7 +654,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         }
       } else {
         minNightsMessage.style.display = "none";
-        // Realça a faixa entre check-in e o dia "hovered"
         dayCells.forEach(cell => {
           const cellDate = new Date(cell.dataset.date);
           if (cellDate >= checkinDate && cellDate <= hoveredDate) {
@@ -643,7 +675,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       if (selectedCheckin && !selectedCheckout) {
         const nights = (new Date(dateStr) - new Date(selectedCheckin)) / (1000 * 3600 * 24);
         if (nights < 4) { 
-          // Se a estadia não atingir 4 noites, não altera a seleção
           return; 
         }
         selectedCheckout = dateStr;
@@ -663,7 +694,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     }
     
     /****************************************************
-     * RESUMO E BREAKDOWN
+     * RESUMO E BREAKDOWN (Reserva)
      ****************************************************/
     function showResumo() {
       const nights = calculateNights(selectedCheckin, selectedCheckout);
@@ -672,7 +703,9 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       const cleaningFee = 50;
       let discount = (nights > 7) ? 0.04 * nightsCost : 0;
       const total = nightsCost - discount + cleaningFee;
-      resumoText.textContent = `${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)} | Total: ${total.toFixed(2)}€`;
+      // Exibe as datas numa linha e o total noutra linha, seguido do "Ver detalhes"
+      resumoText.innerHTML = `<p>${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)}</p>
+                              <p>Total: ${total.toFixed(2)}€</p>`;
       resumoContainer.style.display = "block";
       document.querySelector("#bookingDateInput span").textContent = `${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)}`;
       reserveBtn.style.display = "block";
