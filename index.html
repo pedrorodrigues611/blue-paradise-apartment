@@ -63,12 +63,32 @@
             <p>O Blue Paradise Apartment está localizado no Caniço. Este apartamento é um local novo, muito espaçoso e moderno, com muita luz natural, vista parcial para o mar e um amplo pátio.
             Apartamento está muito bem localizado. Você pode encontrar restaurantes, padarias e bares a poucos passos. A praia mais próxima fica a apenas cinco minutos a pé. A nossa bela cidade do Funchal fica a 10 minutos de carro. Também fica perto do aeroporto.
             Supermercado e cafeteria no mesmo prédio.</p>
+            <p>✔ 2 Quartos confortáveis <br>
+            ✔ 2 Banheiros modernos <br>
+            ✔ Cozinha totalmente equipada <br>
+            ✔ Wi-Fi gratuito e TV a cabo <br>
+            ✔ Sacada com vista incrível <br>
+            ✔ Localização privilegiada, perto de restaurantes e praias</p>
         </div>
 
         <div class="details">
             <p>Funchal - 4 hóspedes - 2 quartos - 2 banheiros</p>
+            
+            <div class="facilities">
+                <p>🍽 Cozinha &nbsp; 🔥 Forno &nbsp; 🌿 Jardim</p>
+                <button id="show-amenities">Mostrar todas as 10 comodidades</button>
+                <div id="amenities-list" class="hidden" style="display:none;">
+                    <p>✔ Wi-Fi rápido &nbsp; ✔ Ar Condicionado &nbsp; ✔ Máquina de Lavar</p>
+                    <p>✔ Piscina &nbsp; ✔ TV a Cabo &nbsp; ✔ Estacionamento</p>
+                </div>
+            </div>
+            
+            <div class="rules">
+                <p>✔ Check-in: 15h &nbsp; ✔ Check-out: 11h</p>
+                <p>✔ Crianças permitido &nbsp; ❌ Fumar não permitido</p>
+            </div>
 
-            <!-- Caixa de reserva -->
+            <!-- NOVO: Caixa de reserva com preço -->
             <div class="reservation-box">
                 <div class="price">€120/noite</div>
                 <label for="checkin">Check-in</label>
@@ -85,15 +105,83 @@
                 <button class="reserve-btn">Reservar</button>
             </div>
 
-            <!-- Mistura dos dois calendários em um só -->
             <div class="calendar">
                 <h3>Disponibilidade</h3>
                 <iframe src="https://calendar.google.com/calendar/embed?
-                src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
-                &src=gq3m477imq71fcv56kojh45833nphv7r%40import.calendar.google.com
-                &ctz=Europe%2FLisbon" 
-                style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
+&src=gq3m477imq71fcv56kojh45833nphv7r%40import.calendar.google.com
+&ctz=Europe%2FLisbon" 
+style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
             </div>
+        </div>
+    </div>
+
+    <style>
+        /* Ajuste do layout */
+        .reservation-box {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            width: 30%;
+        }
+
+        .reserve-btn {
+            width: 20%;
+            background-color: #ff5a5f;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .reserve-btn:hover {
+            background-color: #e0484d;
+        }
+
+        /* Estilo do carrossel */
+        .image-gallery {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 50%;
+        }
+
+        .prev { left: 10px; }
+        .next { right: 10px; }
+    </style>
+<div class="calendar">
+            <h3>Disponibilidade</h3>
+            <iframe src="https://calendar.google.com/calendar/embed?
+            src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
+            &src=gq3m477imq71fcv56kojh45833nphv7r%40import.calendar.google.com
+            &ctz=Europe%2FLisbon" 
+            style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
         </div>
     </div>
 
@@ -108,23 +196,19 @@
             async function getBookedDates() {
                 let events = [];
                 const urls = [
-                    `https://www.googleapis.com/calendar/v3/calendars/${calendarId1}/events?key=${apiKey}`,
-                    `https://www.googleapis.com/calendar/v3/calendars/${calendarId2}/events?key=${apiKey}`
+                    https://www.googleapis.com/calendar/v3/calendars/${calendarId1}/events?key=${apiKey},
+                    https://www.googleapis.com/calendar/v3/calendars/${calendarId2}/events?key=${apiKey}
                 ];
 
                 for (let url of urls) {
-                    try {
-                        let response = await fetch(url);
-                        let data = await response.json();
-                        if (data.items) {
-                            data.items.forEach(event => {
-                                if (event.start && event.start.date) {
-                                    events.push(event.start.date);
-                                }
-                            });
-                        }
-                    } catch (error) {
-                        console.error("Erro ao buscar eventos:", error);
+                    let response = await fetch(url);
+                    let data = await response.json();
+                    if (data.items) {
+                        data.items.forEach(event => {
+                            if (event.start && event.start.date) {
+                                events.push(event.start.date);
+                            }
+                        });
                     }
                 }
                 return events;
