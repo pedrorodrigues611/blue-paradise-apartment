@@ -5,6 +5,10 @@
   <title>Blue Paradise Apartment by Hoperty</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    :root {
+      --primary-color: #1B3F4B;
+      --primary-hover: #16303a;
+    }
     /* ========== CSS BASE ========= */
     body, h1, p, button, span, select {
       margin: 0;
@@ -46,7 +50,7 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(27,63,75,0.8);
       color: #fff;
       border: none;
       padding: 10px 15px;
@@ -58,7 +62,7 @@
     .image-gallery .prev { left: 10px; }
     .image-gallery .next { right: 10px; }
     .image-gallery button:hover {
-      background-color: rgba(0,0,0,0.8);
+      background-color: var(--primary-hover);
     }
     /* ========== Conteúdo em 2 colunas (Informações / Reserva) ========== */
     .content-wrapper {
@@ -93,7 +97,7 @@
     }
     .facilities { margin-bottom: 10px; }
     .facilities button {
-      background-color: #007bff;
+      background-color: var(--primary-color);
       color: #fff;
       border: none;
       padding: 8px 15px;
@@ -102,9 +106,7 @@
       font-size: 14px;
       transition: background 0.3s;
     }
-    .facilities button:hover {
-      background-color: #0056b3;
-    }
+    .facilities button:hover { background-color: var(--primary-hover); }
     #amenities-list {
       display: none;
       margin-top: 10px;
@@ -160,7 +162,7 @@
       cursor: pointer;
       transition: border-color 0.3s;
     }
-    .booking-input:hover { border-color: #007bff; }
+    .booking-input:hover { border-color: var(--primary-color); }
     .booking-input img {
       width: 20px;
       height: 20px;
@@ -208,7 +210,7 @@
       border: none;
       cursor: pointer;
       font-size: 16px;
-      color: #007bff;
+      color: var(--primary-color);
     }
     .date-picker-grid {
       display: grid;
@@ -233,15 +235,24 @@
       cursor: not-allowed;
     }
     .selected-day {
-      background-color: #28a745;
+      background-color: var(--primary-color);
       color: #fff;
     }
-    .range-day {
-      background-color: #c3e6cb;
+    .range-day, .hover-range {
+      background-color: var(--primary-color) !important;
+      color: #fff !important;
     }
-    /* Classes para hover indicando validade */
-    .valid-hover { background-color: #d4edda !important; }
-    .invalid-hover { background-color: #f8d7da !important; }
+    /* Mensagem de estadia mínima */
+    #minNightsMessage {
+      display: none;
+      margin-top: 5px;
+      padding: 5px;
+      background: var(--primary-color);
+      color: #fff;
+      text-align: center;
+      border-radius: 5px;
+      font-size: 14px;
+    }
     /* ========== Resumo e Breakdown ========== */
     .resumo-container,
     .breakdown-container {
@@ -260,15 +271,15 @@
     .toggle-detalhes {
       display: inline-block;
       margin-top: 10px;
-      color: #007bff;
+      color: var(--primary-color);
       cursor: pointer;
       text-decoration: underline;
       font-size: 14px;
     }
-    /* Botão Reservar (azul conforme print) */
+    /* Botão Reservar */
     .reserve-btn {
       width: 100%;
-      background-color: #007bff;
+      background-color: var(--primary-color);
       color: #fff;
       border: none;
       padding: 10px;
@@ -278,7 +289,7 @@
       border-radius: 5px;
       transition: background 0.3s;
     }
-    .reserve-btn:hover { background-color: #0056b3; }
+    .reserve-btn:hover { background-color: var(--primary-hover); }
   </style>
 </head>
 <body>
@@ -365,6 +376,8 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
           </div>
           <!-- Date Picker Customizado -->
           <div class="date-picker-container" id="customDatePicker"></div>
+          <!-- Mensagem de estadia mínima -->
+          <div id="minNightsMessage">A estadia mínima é 4 noites</div>
           <!-- Resumo (exibe datas e preço total) -->
           <div class="resumo-container" id="resumoContainer">
             <p id="resumoText"></p>
@@ -442,11 +455,13 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       return events;
     }
     /****************************************************
-     * DATE PICKER CUSTOMIZADO COM NAVEGAÇÃO
+     * DATE PICKER CUSTOMIZADO COM NAVEGAÇÃO E HIGHLIGHT DE INTERVALO
      ****************************************************/
     let currentCalendarYear, currentCalendarMonth;
+    let currentHoveredDate = null;
     const bookingDateInput = document.getElementById("bookingDateInput");
     const datePickerContainer = document.getElementById("customDatePicker");
+    const minNightsMessage = document.getElementById("minNightsMessage");
     let selectedCheckin = null, selectedCheckout = null;
     let bookedDatesGlobal = [];
     // Ao clicar no input de datas, inicializa o calendário para o mês atual
@@ -505,7 +520,8 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       const daysOfWeek = ["D","S","T","Q","Q","S","S"];
       daysOfWeek.forEach(d => { 
         const cell = document.createElement("div"); 
-        cell.style.fontWeight = "bold"; cell.textContent = d; 
+        cell.style.fontWeight = "bold"; 
+        cell.textContent = d; 
         gridDiv.appendChild(cell);
       });
       let firstDay = new Date(year, month, 1);
@@ -517,11 +533,13 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         cell.className = "date-picker-day";
         cell.textContent = day;
         const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-        // Se a data já estiver selecionada, permite deselecionar
+        cell.dataset.date = dateStr;
+        // Se a data já estiver selecionada, permite deselecionar ao clicar
         if (selectedCheckin === dateStr || selectedCheckout === dateStr) {
           cell.classList.add("selected-day");
           cell.addEventListener("click", () => {
             selectedCheckin = null; selectedCheckout = null;
+            currentHoveredDate = null;
             generateCalendar(currentCalendarYear, currentCalendarMonth);
             document.querySelector("#bookingDateInput span").textContent = "Selecione datas";
             document.getElementById("resumoContainer").style.display = "none";
@@ -531,28 +549,56 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         } else if (bookedDatesGlobal.includes(dateStr)) {
           cell.classList.add("disabled-day");
         } else {
-          // Adiciona mouseover para indicar se a data seria válida ou não
+          // Mouseover: atualiza global currentHoveredDate e realça a faixa
           cell.addEventListener("mouseover", function() {
             if (selectedCheckin && !selectedCheckout) {
-              let potentialNights = calculateNights(selectedCheckin, dateStr);
-              if (potentialNights < 4) { 
-                cell.classList.add("invalid-hover");
-                cell.title = "Mínimo 4 noites necessário";
-              } else { 
-                cell.classList.add("valid-hover"); 
-                cell.title = "";
-              }
+              currentHoveredDate = dateStr;
+              updateCalendarHighlights();
             }
           });
           cell.addEventListener("mouseout", function() {
-            cell.classList.remove("invalid-hover");
-            cell.classList.remove("valid-hover");
+            currentHoveredDate = null;
+            updateCalendarHighlights();
           });
           cell.addEventListener("click", () => handleDateSelection(dateStr));
         }
         gridDiv.appendChild(cell);
       }
       datePickerContainer.appendChild(gridDiv);
+      // Adiciona o aviso de estadia mínima
+      datePickerContainer.appendChild(minNightsMessage);
+    }
+    // Atualiza os destaques na faixa de datas
+    function updateCalendarHighlights() {
+      const dayCells = datePickerContainer.querySelectorAll(".date-picker-day");
+      if (!selectedCheckin || !currentHoveredDate) {
+        dayCells.forEach(cell => cell.classList.remove("hover-range"));
+        minNightsMessage.style.display = "none";
+        return;
+      }
+      const checkinDate = new Date(selectedCheckin);
+      const hoveredDate = new Date(currentHoveredDate);
+      let start = checkinDate;
+      let end = hoveredDate;
+      if (hoveredDate < checkinDate) { // se estiver invertido, nada realça
+        dayCells.forEach(cell => cell.classList.remove("hover-range"));
+        minNightsMessage.style.display = "none";
+        return;
+      }
+      const potentialNights = (hoveredDate - checkinDate) / (1000 * 3600 * 24);
+      dayCells.forEach(cell => {
+        const cellDate = new Date(cell.dataset.date);
+        if (cellDate >= checkinDate && cellDate <= hoveredDate) {
+          cell.classList.add("hover-range");
+        } else {
+          cell.classList.remove("hover-range");
+        }
+      });
+      if (potentialNights < 4) {
+        minNightsMessage.style.display = "block";
+      } else {
+        minNightsMessage.style.display = "none";
+      }
     }
     // Converte YYYY-MM-DD para DD/MM/AAAA
     function formatDate(dateStr) {
@@ -560,10 +606,9 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       return `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
     function handleDateSelection(dateStr) {
-      // Se clicar num dia já selecionado, deseleciona (já tratado no generateCalendar)
       if (selectedCheckin && !selectedCheckout) {
-        let nights = calculateNights(selectedCheckin, dateStr);
-        if (nights < 4) { return; } // Não faz nada se não atingir 4 noites
+        const nights = (new Date(dateStr) - new Date(selectedCheckin)) / (1000 * 3600 * 24);
+        if (nights < 4) { return; }
         selectedCheckout = dateStr;
         datePickerContainer.style.display = "none";
         showResumo();
@@ -590,7 +635,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       const cleaningFee = 50;
       let discount = (nights > 7) ? 0.04 * nightsCost : 0;
       const total = nightsCost - discount + cleaningFee;
-      // Atualiza o resumo para mostrar apenas as datas (formatadas) e o total
       resumoText.textContent = `${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)} | Total: ${total.toFixed(2)}€`;
       resumoContainer.style.display = "block";
       document.querySelector("#bookingDateInput span").textContent = `${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)}`;
