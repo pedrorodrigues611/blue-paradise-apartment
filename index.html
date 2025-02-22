@@ -95,11 +95,13 @@
       color: var(--primary-color);
       margin-bottom: 10px;
     }
-    /* Separadores */
+    /* Separadores com espaçamento extra */
+    br + hr + br {
+      /* garante que as <br> + <hr> + <br> fiquem juntas */
+    }
     hr {
       border: 0;
       border-top: 1px solid #ccc;
-      margin: 10px 0;
     }
     /* ========== Comodidades ========== */
     .facilities {
@@ -151,8 +153,50 @@
       color: var(--primary-color);
       font-size: 16px;
     }
-    .comments .review {
+    .comments h2 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+    .comments-summary {
       margin-bottom: 15px;
+      font-size: 16px;
+      color: var(--primary-color);
+    }
+    /* Rolagem horizontal para os comentários */
+    .comments-wrapper {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 10px 0;
+    }
+    .comment-box {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+      min-width: 220px;
+      background-color: #f9f9f9;
+      color: var(--primary-color);
+    }
+    .comment-rating {
+      background-color: var(--primary-color);
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 4px;
+      display: inline-block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .comment-user-date {
+      margin-bottom: 5px;
+    }
+    .comment-user-date strong {
+      margin-right: 5px;
+    }
+    .comment-date {
+      font-size: 14px;
+      color: #333;
+      display: block;
+      margin-top: 3px;
     }
     /* ========== Booking Container (Reserva) ========== */
     .booking-container {
@@ -346,7 +390,7 @@
         </div>
         <div class="details">
           <p>Funchal - 4 hóspedes - 2 quartos - 2 casas de banho</p>
-          <hr>
+          <br><hr><br>
           <div class="facilities">
             <p>🍽 Cozinha &nbsp; 🔥 Forno &nbsp; 🌿 Jardim</p>
             <button id="show-amenities">Mostrar todas as 10 comodidades</button>
@@ -355,13 +399,13 @@
               <p>✔ Piscina &nbsp; ✔ TV a Cabo &nbsp; ✔ Estacionamento</p>
             </div>
           </div>
-          <hr>
+          <br><hr><br>
           <h2>Regras da casa</h2>
           <div class="rules">
             <p>✔ Check-in: 15h &nbsp; ✔ Check-out: 11h</p>
             <p>✔ Crianças permitidas &nbsp; ✔ Bebés permitidos &nbsp; ❌ Fumar não permitido &nbsp; ❌ Festas não permitidas</p>
           </div>
-          <hr>
+          <br><hr><br>
           <div class="calendar">
             <h3>Disponibilidade</h3>
             <iframe src="https://calendar.google.com/calendar/embed?
@@ -375,21 +419,78 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
                     scrolling="no">
             </iframe>
           </div>
-          <hr>
-          <h2>Comentários</h2>
+          <br><hr><br>
           <div class="comments">
-            <div class="review">
-              <p>
-                <strong>Aleksandra <img src="https://img.icons8.com/color/24/000000/union-jack.png" alt="UK Flag"></strong>
-              </p>
-              <p>
-                <img src="https://img.icons8.com/fluency/24/000000/star.png" alt="Star">
-                <img src="https://img.icons8.com/fluency/24/000000/star.png" alt="Star">
-                <img src="https://img.icons8.com/fluency/24/000000/star.png" alt="Star">
-                <img src="https://img.icons8.com/fluency/24/000000/star.png" alt="Star">
-                <img src="https://img.icons8.com/fluency/24/000000/star.png" alt="Star">
-              </p>
-              <p>Loved the staying!</p>
+            <h2>Comentários (7)</h2>
+            <!-- Média de avaliações -->
+            <div class="comments-summary">
+              <p>Média de avaliações: <strong>5.00</strong></p>
+            </div>
+            <!-- Rolagem horizontal -->
+            <div class="comments-wrapper">
+              <!-- 1) Aleksandra, Reino Unido -->
+              <div class="comment-box">
+                <div class="comment-rating">5.00</div>
+                <div class="comment-user-date">
+                  <span><strong>Aleksandra</strong> <img src="https://img.icons8.com/color/24/great-britain.png" alt="Reino Unido"></span>
+                  <span class="comment-date">dezembro de 2024</span>
+                </div>
+                <p>Loved the staying!</p>
+              </div>
+              <!-- 2) Flávio, Portugal -->
+              <div class="comment-box">
+                <div class="comment-rating">5.00</div>
+                <div class="comment-user-date">
+                  <span><strong>Flávio</strong> <img src="https://img.icons8.com/color/24/portugal.png" alt="Portugal"></span>
+                  <span class="comment-date">janeiro de 2025</span>
+                </div>
+                <p>Ótimo local!</p>
+              </div>
+              <!-- 3) Pierre, França -->
+              <div class="comment-box">
+                <div class="comment-rating">5.00</div>
+                <div class="comment-user-date">
+                  <span><strong>Pierre</strong> <img src="https://img.icons8.com/color/24/france.png" alt="França"></span>
+                  <span class="comment-date">fevereiro de 2025</span>
+                </div>
+                <p>Fantástica estadia!</p>
+              </div>
+              <!-- 4) Mia, Suécia -->
+              <div class="comment-box">
+                <div class="comment-rating">5.00</div>
+                <div class="comment-user-date">
+                  <span><strong>Mia</strong> <img src="https://img.icons8.com/color/24/sweden.png" alt="Suécia"></span>
+                  <span class="comment-date">março de 2025</span>
+                </div>
+                <p>Muito bom!</p>
+              </div>
+              <!-- 5) Laura, Alemanha -->
+              <div class="comment-box">
+                <div class="comment-rating">5.00</div>
+                <div class="comment-user-date">
+                  <span><strong>Laura</strong> <img src="https://img.icons8.com/color/24/germany.png" alt="Alemanha"></span>
+                  <span class="comment-date">abril de 2025</span>
+                </div>
+                <p>Recomendo a 100%!</p>
+              </div>
+              <!-- 6) Luis, Espanha -->
+              <div class="comment-box">
+                <div class="comment-rating">5.00</div>
+                <div class="comment-user-date">
+                  <span><strong>Luis</strong> <img src="https://img.icons8.com/color/24/spain.png" alt="Espanha"></span>
+                  <span class="comment-date">maio de 2025</span>
+                </div>
+                <p>Excelente!</p>
+              </div>
+              <!-- 7) Gianna, Itália -->
+              <div class="comment-box">
+                <div class="comment-rating">5.00</div>
+                <div class="comment-user-date">
+                  <span><strong>Gianna</strong> <img src="https://img.icons8.com/color/24/italy.png" alt="Itália"></span>
+                  <span class="comment-date">junho de 2025</span>
+                </div>
+                <p>Perfeito!</p>
+              </div>
             </div>
           </div>
         </div>
@@ -433,6 +534,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       </div>
     </div>
   </div>
+
   <script>
     /********************************************
      * SCRIPT BASE (Carrossel, Amenities)
@@ -501,7 +603,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     let currentHoveredDate = null;
     let selectedCheckin = null, selectedCheckout = null;
     let bookedDatesGlobal = [];
-    // Variável global para o aviso de estadia mínima
     let minNightsMessage;
     
     const bookingDateInput = document.getElementById("bookingDateInput");
@@ -645,7 +746,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
         const hoveredCell = datePickerContainer.querySelector(`[data-date="${currentHoveredDate}"]`);
         if (hoveredCell) {
-          // Calcula a posição: reposiciona o aviso uma linha acima da linha do hoveredCell
           let newTop = hoveredCell.offsetTop - hoveredCell.offsetHeight - 5;
           newTop = newTop < 0 ? 0 : newTop;
           minNightsMessage.style.left = hoveredCell.offsetLeft + "px";
@@ -703,7 +803,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       const cleaningFee = 50;
       let discount = (nights > 7) ? 0.04 * nightsCost : 0;
       const total = nightsCost - discount + cleaningFee;
-      // Exibe as datas numa linha e o total noutra linha, seguido do "Ver detalhes"
+      // Exibe as datas numa linha e o total noutra linha
       resumoText.innerHTML = `<p>${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)}</p>
                               <p>Total: ${total.toFixed(2)}€</p>`;
       resumoContainer.style.display = "block";
