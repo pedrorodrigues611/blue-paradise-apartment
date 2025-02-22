@@ -245,16 +245,17 @@
       background-color: var(--primary-color) !important;
       color: #fff !important;
     }
-    /* Mensagem de estadia mínima (inserida dinamicamente acima do grid) */
+    /* Mensagem de estadia mínima – sem ocupar toda a largura */
     #minNightsMessage {
       display: none;
-      margin-bottom: 5px;
-      padding: 5px;
+      padding: 5px 10px;
       background: var(--primary-color);
       color: #fff;
       text-align: center;
       border-radius: 5px;
       font-size: 14px;
+      position: absolute;
+      white-space: nowrap;
     }
     /* Resumo e Breakdown */
     .resumo-container,
@@ -462,7 +463,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     let currentHoveredDate = null;
     let selectedCheckin = null, selectedCheckout = null;
     let bookedDatesGlobal = [];
-    // Declaramos a variável global para a mensagem de estadia mínima
+    // Variável global para o aviso de estadia mínima
     let minNightsMessage;
     
     const bookingDateInput = document.getElementById("bookingDateInput");
@@ -492,11 +493,11 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       // Limpa o conteúdo do container do calendário
       datePickerContainer.innerHTML = "";
       
-      // Cria e adiciona a mensagem de estadia mínima (ficará acima do grid)
+      // Cria e adiciona a mensagem de estadia mínima (ela será reposicionada dinamicamente)
       minNightsMessage = document.createElement("div");
       minNightsMessage.id = "minNightsMessage";
-      minNightsMessage.style.display = "none";
       minNightsMessage.textContent = "A estadia mínima é 4 noites";
+      // Já aplica o estilo via CSS (display inline-block para width automática)
       datePickerContainer.appendChild(minNightsMessage);
       
       // Cabeçalho com navegação
@@ -587,9 +588,10 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       datePickerContainer.appendChild(gridDiv);
     }
     
-    // Atualiza os destaques na faixa de datas e exibe a mensagem se não atingir 4 noites
+    // Atualiza os destaques e reposiciona o aviso, se necessário
     function updateCalendarHighlights() {
       const dayCells = datePickerContainer.querySelectorAll(".date-picker-day");
+      // Se não houver seleção de check-in ou nenhum dia estiver sendo "hovered", oculta o aviso
       if (!selectedCheckin || !currentHoveredDate) {
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
         minNightsMessage.style.display = "none";
@@ -597,6 +599,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
       const checkinDate = new Date(selectedCheckin);
       const hoveredDate = new Date(currentHoveredDate);
+      // Se o dia "hovered" for anterior ao check-in, desmarca e oculta o aviso
       if (hoveredDate < checkinDate) {
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
         minNightsMessage.style.display = "none";
@@ -604,11 +607,21 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
       const potentialNights = (hoveredDate - checkinDate) / (1000 * 3600 * 24);
       if (potentialNights < 4) {
+        // Não realça a faixa e exibe o aviso reposicionado acima da linha da célula "hovered"
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
-        minNightsMessage.style.display = "block";
-        minNightsMessage.textContent = "A estadia mínima é 4 noites";
+        const hoveredCell = datePickerContainer.querySelector(`[data-date="${currentHoveredDate}"]`);
+        if (hoveredCell) {
+          // Posiciona o aviso uma linha acima: subtrai a altura da célula (30px) e o gap (5px)
+          let newTop = hoveredCell.offsetTop - hoveredCell.offsetHeight - 5;
+          // Se o cálculo resultar em valor negativo, usa 0
+          newTop = newTop < 0 ? 0 : newTop;
+          minNightsMessage.style.left = hoveredCell.offsetLeft + "px";
+          minNightsMessage.style.top = newTop + "px";
+          minNightsMessage.style.display = "block";
+        }
       } else {
         minNightsMessage.style.display = "none";
+        // Realça a faixa entre check-in e o dia "hovered"
         dayCells.forEach(cell => {
           const cellDate = new Date(cell.dataset.date);
           if (cellDate >= checkinDate && cellDate <= hoveredDate) {
@@ -663,7 +676,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       resumoContainer.style.display = "block";
       document.querySelector("#bookingDateInput span").textContent = `${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)}`;
       reserveBtn.style.display = "block";
-      // "Ver detalhes" só é exibido após a seleção completa
       toggleDetalhes.textContent = "Ver detalhes";
       breakdownContainer.style.display = "none";
     }
