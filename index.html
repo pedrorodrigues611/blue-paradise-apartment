@@ -1,238 +1,674 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blue Paradise Apartment by Hoperty</title>
-    <link rel="stylesheet" href="layout.css">
-    <script defer>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Carrossel de imagens
-            let currentImageIndex = 0;
-            const images = [
-                "https://i.imgur.com/h9vIQpq.jpeg",
-                "https://i.imgur.com/BgggDFV.jpeg",
-                "https://imgur.com/Fe8ECNE.jpeg",
-                "https://imgur.com/rVkhRc4.jpeg",
-                "https://imgur.com/JpITN8m.jpeg"
-            ];
-            const mainImage = document.querySelector(".main-image img");
-            const nextButton = document.querySelector(".next");
-            const prevButton = document.querySelector(".prev");
+  <meta charset="UTF-8">
+  <title>Blue Paradise Apartment by Hoperty</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- layout.css integrado diretamente para demonstração -->
+  <style>
+    /* ========== SEU CSS EXISTENTE ========== */
+    body, h1, p, button {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
-            function updateImage() {
-                mainImage.src = images[currentImageIndex];
-            }
+    body {
+      background-color: #f5f8f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-            nextButton.addEventListener("click", function() {
-                currentImageIndex = (currentImageIndex + 1) % images.length;
-                updateImage();
-            });
+    .container {
+      max-width: 900px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
 
-            prevButton.addEventListener("click", function() {
-                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-                updateImage();
-            });
+    /* Carrossel de imagens */
+    .image-gallery {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+    }
 
-            // Mostrar/Esconder comodidades
-            const showAmenitiesBtn = document.getElementById("show-amenities");
-            const amenitiesList = document.getElementById("amenities-list");
-            showAmenitiesBtn.addEventListener("click", function() {
-                if (amenitiesList.style.display === "none") {
-                    amenitiesList.style.display = "block";
-                } else {
-                    amenitiesList.style.display = "none";
-                }
-            });
-        });
-    </script>
+    .image-gallery .main-image img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+    }
+
+    .image-gallery button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 50%;
+      transition: background 0.3s;
+    }
+
+    .image-gallery .prev { left: 10px; }
+    .image-gallery .next { right: 10px; }
+
+    .image-gallery button:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Detalhes da propriedade */
+    .details {
+      margin-top: 20px;
+    }
+
+    .details h1 {
+      font-size: 22px;
+      color: #333;
+    }
+
+    .details p {
+      font-size: 16px;
+      color: #666;
+    }
+
+    /* Comodidades */
+    .facilities {
+      margin-top: 10px;
+    }
+
+    .facilities button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    .facilities button:hover {
+      background-color: #0056b3;
+    }
+
+    #amenities-list {
+      display: none;
+      margin-top: 10px;
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    /* Regras */
+    .rules {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* Caixa de reserva */
+    .reservation-box {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      max-width: 400px;
+    }
+
+    .reservation-box label {
+      font-weight: bold;
+    }
+
+    .reservation-box select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .reservation-box button {
+      width: 100%;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    .reservation-box button:hover {
+      background-color: #218838;
+    }
+
+    /* Calendário (iframe) */
+    .calendar {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .calendar iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    /* Descrição do Apartamento */
+    .description {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+    }
+
+    .description p {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* ========== ESTILOS PARA O NOSSO DATE PICKER CUSTOMIZADO ========== */
+    .date-picker-container {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      width: 300px;
+      margin-top: 10px;
+      display: none; /* Inicialmente oculto */
+      position: absolute;
+      z-index: 999; /* Certifique-se de que fique acima de outros elementos */
+    }
+
+    .date-picker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .date-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      text-align: center;
+    }
+
+    .date-picker-day {
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .date-picker-day:hover {
+      background-color: #ddd;
+    }
+
+    .disabled-day {
+      background-color: #f1f1f1;
+      color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .selected-day {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .range-day {
+      background-color: #c3e6cb;
+    }
+
+    /* Passos da reserva (Resumo, Breakdown) */
+    .resumo-container, .breakdown-container {
+      margin-top: 15px;
+      padding: 10px;
+      background: #f1f1f1;
+      border-radius: 6px;
+      display: none; /* Surge depois */
+    }
+
+    .breakdown-container p {
+      margin: 5px 0;
+    }
+
+    .close-btn {
+      background: #ccc;
+      color: #333;
+      border: none;
+      padding: 5px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      float: right;
+    }
+
+    .close-btn:hover {
+      background: #bbb;
+    }
+  </style>
 </head>
 <body>
-   <div class="container">
-        <div class="image-gallery">
-            <button class="prev">&#10094;</button>
-            <div class="main-image">
-                <img src="https://i.imgur.com/h9vIQpq.jpeg" alt="Blue Paradise Apartment">
-            </div>
-            <button class="next">&#10095;</button>
-        </div>
+<div class="container">
 
-        <!-- Descrição do Apartamento -->
-        <div class="description">
-            <h1>Blue Paradise Apartment by Hoperty</h1>
-            <p>O Blue Paradise Apartment está localizado no Caniço. Este apartamento é um local novo, muito espaçoso e moderno, com muita luz natural, vista parcial para o mar e um amplo pátio.
-            Apartamento está muito bem localizado. Você pode encontrar restaurantes, padarias e bares a poucos passos. A praia mais próxima fica a apenas cinco minutos a pé. A nossa bela cidade do Funchal fica a 10 minutos de carro. Também fica perto do aeroporto.
-            Supermercado e cafeteria no mesmo prédio.</p>
-            <p>✔ 2 Quartos confortáveis <br>
-            ✔ 2 Banheiros modernos <br>
-            ✔ Cozinha totalmente equipada <br>
-            ✔ Wi-Fi gratuito e TV a cabo <br>
-            ✔ Sacada com vista incrível <br>
-            ✔ Localização privilegiada, perto de restaurantes e praias</p>
-        </div>
+  <!-- Carrossel de imagens -->
+  <div class="image-gallery">
+    <button class="prev">&#10094;</button>
+    <div class="main-image">
+      <img src="https://i.imgur.com/h9vIQpq.jpeg" alt="Blue Paradise Apartment">
+    </div>
+    <button class="next">&#10095;</button>
+  </div>
 
-        <div class="details">
-            <p>Funchal - 4 hóspedes - 2 quartos - 2 banheiros</p>
-            
-            <div class="facilities">
-                <p>🍽 Cozinha &nbsp; 🔥 Forno &nbsp; 🌿 Jardim</p>
-                <button id="show-amenities">Mostrar todas as 10 comodidades</button>
-                <div id="amenities-list" class="hidden" style="display:none;">
-                    <p>✔ Wi-Fi rápido &nbsp; ✔ Ar Condicionado &nbsp; ✔ Máquina de Lavar</p>
-                    <p>✔ Piscina &nbsp; ✔ TV a Cabo &nbsp; ✔ Estacionamento</p>
-                </div>
-            </div>
-            
-            <div class="rules">
-                <p>✔ Check-in: 15h &nbsp; ✔ Check-out: 11h</p>
-                <p>✔ Crianças permitido &nbsp; ❌ Fumar não permitido</p>
-            </div>
+  <!-- Descrição do Apartamento -->
+  <div class="description">
+    <h1>Blue Paradise Apartment by Hoperty</h1>
+    <p>
+      O Blue Paradise Apartment está localizado no Caniço. Este apartamento é um local novo, muito espaçoso e moderno,
+      com muita luz natural, vista parcial para o mar e um amplo pátio.
+      Apartamento está muito bem localizado. Você pode encontrar restaurantes, padarias e bares a poucos passos.
+      A praia mais próxima fica a apenas cinco minutos a pé. A nossa bela cidade do Funchal fica a 10 minutos de carro.
+      Também fica perto do aeroporto. Supermercado e cafeteria no mesmo prédio.
+    </p>
+    <p>
+      ✔ 2 Quartos confortáveis <br>
+      ✔ 2 Banheiros modernos <br>
+      ✔ Cozinha totalmente equipada <br>
+      ✔ Wi-Fi gratuito e TV a cabo <br>
+      ✔ Sacada com vista incrível <br>
+      ✔ Localização privilegiada, perto de restaurantes e praias
+    </p>
+  </div>
 
-            <!-- NOVO: Caixa de reserva com preço -->
-            <div class="reservation-box">
-                <div class="price">€120/noite</div>
-                <label for="checkin">Check-in</label>
-                <input type="date" id="checkin">
-                <label for="checkout">Check-out</label>
-                <input type="date" id="checkout">
-                <label for="guests">Nº de hóspedes</label>
-                <select id="guests">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
-                <button class="reserve-btn">Reservar</button>
-            </div>
+  <div class="details">
+    <p>Funchal - 4 hóspedes - 2 quartos - 2 banheiros</p>
+    <div class="facilities">
+      <p>🍽 Cozinha &nbsp; 🔥 Forno &nbsp; 🌿 Jardim</p>
+      <button id="show-amenities">Mostrar todas as 10 comodidades</button>
+      <div id="amenities-list" class="hidden" style="display:none;">
+        <p>✔ Wi-Fi rápido &nbsp; ✔ Ar Condicionado &nbsp; ✔ Máquina de Lavar</p>
+        <p>✔ Piscina &nbsp; ✔ TV a Cabo &nbsp; ✔ Estacionamento</p>
+      </div>
+    </div>
+    <div class="rules">
+      <p>✔ Check-in: 15h &nbsp; ✔ Check-out: 11h</p>
+      <p>✔ Crianças permitido &nbsp; ❌ Fumar não permitido</p>
+    </div>
 
-            <div class="calendar">
-                <h3>Disponibilidade</h3>
-                <iframe src="https://calendar.google.com/calendar/embed?
+    <!-- Caixa de reserva -->
+    <div class="reservation-box">
+      <div class="price">€120/noite</div>
+
+      <!-- Inputs originais (agora ocultos) -->
+      <label for="checkin" style="display:none;">Check-in</label>
+      <input type="date" id="checkin" style="display:none;">
+      <label for="checkout" style="display:none;">Check-out</label>
+      <input type="date" id="checkout" style="display:none;">
+
+      <!-- Botão que abre o nosso date picker customizado -->
+      <button id="selectDatesBtn" style="margin-top: 10px;">Selecionar Datas</button>
+
+      <!-- Container do date picker (inicialmente hidden) -->
+      <div class="date-picker-container" id="customDatePicker"></div>
+
+      <!-- Selecionar número de hóspedes -->
+      <label for="guests" style="display:block; margin-top:10px;">Nº de hóspedes</label>
+      <select id="guests">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+      </select>
+
+      <!-- Resumo (aparece depois de selecionar datas) -->
+      <div class="resumo-container" id="resumoContainer">
+        <span id="closeResumo" class="close-btn">x</span>
+        <p id="resumoText"></p>
+        <button id="verDetalhesBtn">Ver Detalhes</button>
+      </div>
+
+      <!-- Breakdown (aparece depois de clicar em "Ver Detalhes") -->
+      <div class="breakdown-container" id="breakdownContainer">
+        <span id="closeBreakdown" class="close-btn">x</span>
+        <p id="breakdownText"></p>
+      </div>
+
+      <!-- Botão de reservar (podes deixar para o fim do fluxo) -->
+      <button class="reserve-btn" id="reserveBtn" style="display:none;">Reservar</button>
+    </div>
+
+    <!-- Calendário do Google (iframe) -->
+    <div class="calendar">
+      <h3>Disponibilidade</h3>
+      <iframe src="https://calendar.google.com/calendar/embed?
 src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
 &src=gq3m477imq71fcv56kojh45833nphv7r%40import.calendar.google.com
-&ctz=Europe%2FLisbon" 
-style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
-            </div>
-        </div>
+&ctz=Europe%2FLisbon"
+              style="border: 0"
+              width="100%"
+              height="400"
+              frameborder="0"
+              scrolling="no">
+      </iframe>
     </div>
+  </div>
+</div>
 
-    <style>
-        /* Ajuste do layout */
-        .reservation-box {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 15px;
-            width: 100%;
-            max-width: 400px;
-            margin-top: 20px;
-        }
+<script>
+  /********************************************
+   * SEU SCRIPT EXISTENTE (Carrossel, Amenities)
+   ********************************************/
+  document.addEventListener("DOMContentLoaded", function() {
+    // Carrossel de imagens
+    let currentImageIndex = 0;
+    const images = [
+      "https://i.imgur.com/h9vIQpq.jpeg",
+      "https://i.imgur.com/BgggDFV.jpeg",
+      "https://imgur.com/Fe8ECNE.jpeg",
+      "https://imgur.com/rVkhRc4.jpeg",
+      "https://imgur.com/JpITN8m.jpeg"
+    ];
+    const mainImage = document.querySelector(".main-image img");
+    const nextButton = document.querySelector(".next");
+    const prevButton = document.querySelector(".prev");
 
-        .price {
-            font-size: 20px;
-            font-weight: bold;
-            color: #2c3e50;
-            width: 30%;
-        }
+    function updateImage() {
+      mainImage.src = images[currentImageIndex];
+    }
 
-        .reserve-btn {
-            width: 20%;
-            background-color: #ff5a5f;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-        }
+    nextButton.addEventListener("click", function() {
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      updateImage();
+    });
 
-        .reserve-btn:hover {
-            background-color: #e0484d;
-        }
+    prevButton.addEventListener("click", function() {
+      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+      updateImage();
+    });
 
-        /* Estilo do carrossel */
-        .image-gallery {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+    // Mostrar/Esconder comodidades
+    const showAmenitiesBtn = document.getElementById("show-amenities");
+    const amenitiesList = document.getElementById("amenities-list");
+    showAmenitiesBtn.addEventListener("click", function() {
+      if (amenitiesList.style.display === "none") {
+        amenitiesList.style.display = "block";
+      } else {
+        amenitiesList.style.display = "none";
+      }
+    });
+  });
 
-        .prev, .next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 20px;
-            border-radius: 50%;
-        }
+  /****************************************************
+   * LÓGICA PARA BUSCAR DATAS OCUPADAS (Google Calendar)
+   ****************************************************/
+  const calendarId1 = "c4qe8v081ip4g6hfb5v5i99j9jfafsfb@import.calendar.google.com";
+  const calendarId2 = "gq3m477imq71fcv56kojh45833nphv7r@import.calendar.google.com";
+  const apiKey = "SUA_API_KEY"; // <-- Substituir pela tua API Key do Google
 
-        .prev { left: 10px; }
-        .next { right: 10px; }
-    </style>
-<div class="calendar">
-            <h3>Disponibilidade</h3>
-            <iframe src="https://calendar.google.com/calendar/embed?
-            src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
-            &src=gq3m477imq71fcv56kojh45833nphv7r%40import.calendar.google.com
-            &ctz=Europe%2FLisbon" 
-            style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
-        </div>
-    </div>
+  async function getBookedDates() {
+    let events = [];
+    const urls = [
+      `https://www.googleapis.com/calendar/v3/calendars/${calendarId1}/events?key=${apiKey}`,
+      `https://www.googleapis.com/calendar/v3/calendars/${calendarId2}/events?key=${apiKey}`
+    ];
 
-    <script defer>
-        document.addEventListener("DOMContentLoaded", function () {
-            const checkinInput = document.getElementById("checkin");
-            const checkoutInput = document.getElementById("checkout");
-            const calendarId1 = "c4qe8v081ip4g6hfb5v5i99j9jfafsfb@import.calendar.google.com";
-            const calendarId2 = "gq3m477imq71fcv56kojh45833nphv7r@import.calendar.google.com";
-            const apiKey = "SUA_API_KEY"; // Substitua pela sua API Key do Google
-
-            async function getBookedDates() {
-                let events = [];
-                const urls = [
-                    https://www.googleapis.com/calendar/v3/calendars/${calendarId1}/events?key=${apiKey},
-                    https://www.googleapis.com/calendar/v3/calendars/${calendarId2}/events?key=${apiKey}
-                ];
-
-                for (let url of urls) {
-                    let response = await fetch(url);
-                    let data = await response.json();
-                    if (data.items) {
-                        data.items.forEach(event => {
-                            if (event.start && event.start.date) {
-                                events.push(event.start.date);
-                            }
-                        });
-                    }
-                }
-                return events;
-            }
-
-            async function disableBookedDates() {
-                let bookedDates = await getBookedDates();
-                checkinInput.addEventListener("input", function () {
-                    if (bookedDates.includes(this.value)) {
-                        alert("Esta data já está reservada. Escolha outra.");
-                        this.value = "";
-                    }
-                });
-
-                checkoutInput.addEventListener("input", function () {
-                    if (bookedDates.includes(this.value)) {
-                        alert("Esta data já está reservada. Escolha outra.");
-                        this.value = "";
-                    }
-                });
-            }
-
-            disableBookedDates();
+    for (let url of urls) {
+      let response = await fetch(url);
+      let data = await response.json();
+      if (data.items) {
+        data.items.forEach(event => {
+          // Se for do tipo 'date' (dia inteiro)
+          if (event.start && event.start.date) {
+            events.push(event.start.date);
+          }
+          // Se for do tipo 'dateTime', podes adaptar para converter a data
         });
-    </script>
+      }
+    }
+    return events; // array de strings "YYYY-MM-DD" ocupadas
+  }
+
+  /*******************************************************
+   * CRIAR DATE PICKER CUSTOMIZADO E BLOQUEAR DATAS OCUPADAS
+   *******************************************************/
+  const selectDatesBtn = document.getElementById("selectDatesBtn");
+  const datePickerContainer = document.getElementById("customDatePicker");
+
+  // Variáveis para armazenar checkin/checkout selecionados
+  let selectedCheckin = null;
+  let selectedCheckout = null;
+  let bookedDatesGlobal = []; // guardará as datas ocupadas do fetch
+
+  // Mostrar/ocultar date picker
+  selectDatesBtn.addEventListener("click", () => {
+    if (datePickerContainer.style.display === "none") {
+      datePickerContainer.style.display = "block";
+      // Exemplo: gerar o calendário do mês atual (podes estender para vários meses)
+      generateCalendar(new Date().getFullYear(), new Date().getMonth());
+    } else {
+      datePickerContainer.style.display = "none";
+    }
+  });
+
+  // Função para gerar calendário de um mês (simplificado)
+  async function generateCalendar(year, month) {
+    // Se ainda não busquei datas, busco uma vez só
+    if (bookedDatesGlobal.length === 0) {
+      bookedDatesGlobal = await getBookedDates();
+    }
+
+    // Limpar HTML antigo
+    datePickerContainer.innerHTML = "";
+
+    // Cabeçalho com mês e ano
+    const headerDiv = document.createElement("div");
+    headerDiv.className = "date-picker-header";
+
+    const monthNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+                        "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+    const title = document.createElement("span");
+    title.textContent = `${monthNames[month]} ${year}`;
+    headerDiv.appendChild(title);
+
+    datePickerContainer.appendChild(headerDiv);
+
+    // Grid de dias
+    const gridDiv = document.createElement("div");
+    gridDiv.className = "date-picker-grid";
+
+    // Dias da semana (opcional)
+    const daysOfWeek = ["D","S","T","Q","Q","S","S"];
+    daysOfWeek.forEach(d => {
+      const cell = document.createElement("div");
+      cell.style.fontWeight = "bold";
+      cell.textContent = d;
+      gridDiv.appendChild(cell);
+    });
+
+    // Primeiro dia do mês
+    let firstDay = new Date(year, month, 1);
+    // Descobrir dia da semana do primeiro dia (0=Dom,1=Seg,...)
+    let startDay = firstDay.getDay();
+
+    // Ajuste para PT-BR (se 0 = Dom, e queres 1=Seg, etc., adaptas)
+    // Para simplificar, mantenho como está.
+
+    // Preencher espaços em branco antes do dia 1
+    for (let i = 0; i < startDay; i++) {
+      const emptyCell = document.createElement("div");
+      gridDiv.appendChild(emptyCell);
+    }
+
+    // Número de dias no mês
+    const daysInMonth = new Date(year, month+1, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const cell = document.createElement("div");
+      cell.className = "date-picker-day";
+      cell.textContent = day;
+
+      // Montar string YYYY-MM-DD
+      const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+
+      // Verificar se está nas datas ocupadas
+      if (bookedDatesGlobal.includes(dateStr)) {
+        cell.classList.add("disabled-day");
+      } else {
+        // Se não está ocupada, permitir clique
+        cell.addEventListener("click", () => handleDateSelection(dateStr, cell));
+      }
+
+      // Se a data já foi selecionada, marcar visualmente
+      if (selectedCheckin === dateStr || selectedCheckout === dateStr) {
+        cell.classList.add("selected-day");
+      } else if (isInRange(dateStr, selectedCheckin, selectedCheckout)) {
+        // Se está entre checkin e checkout, pintar como range
+        cell.classList.add("range-day");
+      }
+
+      gridDiv.appendChild(cell);
+    }
+
+    datePickerContainer.appendChild(gridDiv);
+  }
+
+  // Verificar se dateStr está entre checkin e checkout
+  function isInRange(dateStr, checkin, checkout) {
+    if (!checkin || !checkout) return false;
+    const d = new Date(dateStr);
+    const cIn = new Date(checkin);
+    const cOut = new Date(checkout);
+    return d >= cIn && d <= cOut;
+  }
+
+  // Lidar com clique num dia
+  function handleDateSelection(dateStr, cell) {
+    // Se não há checkin selecionado ainda, esse será o checkin
+    if (!selectedCheckin) {
+      selectedCheckin = dateStr;
+      selectedCheckout = null; // reset checkout
+    } else if (!selectedCheckout) {
+      // Tentar definir checkout
+      // Verificar se a data clicada é depois do checkin
+      if (new Date(dateStr) <= new Date(selectedCheckin)) {
+        alert("O checkout deve ser depois do check-in!");
+        return;
+      }
+
+      // Verificar se é pelo menos 4 noites
+      const nights = calculateNights(selectedCheckin, dateStr);
+      if (nights < 4) {
+        alert("É necessário um mínimo de 4 noites.");
+        return;
+      }
+
+      // Ok, podemos definir checkout
+      selectedCheckout = dateStr;
+      // Fecha o date picker (ou podes manter aberto)
+      datePickerContainer.style.display = "none";
+
+      // Exibe resumo
+      showResumo();
+    } else {
+      // Já tinha checkin e checkout: reiniciar lógica
+      selectedCheckin = dateStr;
+      selectedCheckout = null;
+    }
+
+    // Atualizar visual
+    generateCalendar(new Date().getFullYear(), new Date().getMonth());
+  }
+
+  // Calcular número de noites
+  function calculateNights(checkin, checkout) {
+    const cIn = new Date(checkin);
+    const cOut = new Date(checkout);
+    const diffTime = cOut - cIn; // milissegundos
+    const diffDays = diffTime / (1000 * 3600 * 24);
+    return diffDays;
+  }
+
+  // Mostrar resumo (após selecionar checkin e checkout)
+  const resumoContainer = document.getElementById("resumoContainer");
+  const resumoText = document.getElementById("resumoText");
+  const closeResumo = document.getElementById("closeResumo");
+
+  function showResumo() {
+    const nights = calculateNights(selectedCheckin, selectedCheckout);
+    resumoText.textContent = `Selecionaste ${nights} noites: 
+      de ${selectedCheckin} até ${selectedCheckout}.`;
+    resumoContainer.style.display = "block";
+
+    // Exibir botão "Reservar" (ou podes exibir só depois de ver detalhes)
+    document.getElementById("reserveBtn").style.display = "block";
+  }
+
+  closeResumo.addEventListener("click", () => {
+    resumoContainer.style.display = "none";
+  });
+
+  /****************************************************
+   * VER DETALHES: Breakdown do preço e desconto
+   ****************************************************/
+  const verDetalhesBtn = document.getElementById("verDetalhesBtn");
+  const breakdownContainer = document.getElementById("breakdownContainer");
+  const breakdownText = document.getElementById("breakdownText");
+  const closeBreakdown = document.getElementById("closeBreakdown");
+
+  verDetalhesBtn.addEventListener("click", () => {
+    // Calcular breakdown
+    const nights = calculateNights(selectedCheckin, selectedCheckout);
+    const baseRate = 120;
+    let nightsCost = baseRate * nights;
+    const cleaningFee = 50;
+    let discount = 0;
+    if (nights > 7) {
+      discount = 0.04 * nightsCost; // 4% do valor das noites
+    }
+    const total = nightsCost - discount + cleaningFee;
+
+    breakdownText.innerHTML = `
+      <p><strong>Noites:</strong> ${nights} x 120€ = ${nightsCost.toFixed(2)}€</p>
+      ${discount > 0 ? `<p><strong>Desconto (4%):</strong> -${discount.toFixed(2)}€</p>` : ""}
+      <p><strong>Taxa de Limpeza:</strong> 50€</p>
+      <hr>
+      <p><strong>Total:</strong> ${total.toFixed(2)}€</p>
+    `;
+    breakdownContainer.style.display = "block";
+  });
+
+  closeBreakdown.addEventListener("click", () => {
+    breakdownContainer.style.display = "none";
+  });
+
+  /**********************************************
+   * Botão "Reservar" (após tudo selecionado)
+   **********************************************/
+  const reserveBtn = document.getElementById("reserveBtn");
+  reserveBtn.addEventListener("click", () => {
+    // Aqui podes enviar os dados para o teu backend
+    alert("Reserva concluída!\nCheck-in: " + selectedCheckin + 
+          "\nCheck-out: " + selectedCheckout + 
+          "\nHóspedes: " + document.getElementById("guests").value);
+  });
+</script>
 </body>
 </html>
