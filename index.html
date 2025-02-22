@@ -97,7 +97,7 @@
     }
     /* Separadores com espaçamento extra */
     br + hr + br {
-      /* garante que as <br> + <hr> + <br> fiquem juntas */
+      /* garante espaçamento acima e abaixo do <hr> */
     }
     hr {
       border: 0;
@@ -148,8 +148,8 @@
       border: none;
       border-radius: 5px;
     }
-    /* ========== Área de Comentários ========== */
-    .comments, .comments p {
+    /* ========== Área de Comentários com 2 por vez ========== */
+    .comments {
       color: var(--primary-color);
       font-size: 16px;
     }
@@ -162,18 +162,39 @@
       font-size: 16px;
       color: var(--primary-color);
     }
-    /* Rolagem horizontal para os comentários */
-    .comments-wrapper {
+    /* Carousel de comentários */
+    .comments-carousel {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .comment-arrow {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--primary-color);
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 50%;
+      transition: background 0.3s;
+    }
+    .comment-arrow:hover {
+      background-color: #ddd;
+    }
+    .comment-arrow:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .comment-slide {
       display: flex;
       gap: 20px;
-      overflow-x: auto;
-      padding: 10px 0;
     }
+    /* Cada "caixa" de comentário */
     .comment-box {
       border: 1px solid #ddd;
       border-radius: 6px;
       padding: 10px;
-      min-width: 220px;
+      width: 250px; /* forçar uma largura fixa para ficar lado a lado */
       background-color: #f9f9f9;
       color: var(--primary-color);
     }
@@ -420,77 +441,18 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
             </iframe>
           </div>
           <br><hr><br>
+          <!-- Área de comentários com 2 por vez -->
           <div class="comments">
             <h2>Comentários (7)</h2>
-            <!-- Média de avaliações -->
             <div class="comments-summary">
               <p>Média de avaliações: <strong>5.00</strong></p>
             </div>
-            <!-- Rolagem horizontal -->
-            <div class="comments-wrapper">
-              <!-- 1) Aleksandra, Reino Unido -->
-              <div class="comment-box">
-                <div class="comment-rating">5.00</div>
-                <div class="comment-user-date">
-                  <span><strong>Aleksandra</strong> <img src="https://img.icons8.com/color/24/great-britain.png" alt="Reino Unido"></span>
-                  <span class="comment-date">dezembro de 2024</span>
-                </div>
-                <p>Loved the staying!</p>
+            <div class="comments-carousel">
+              <button class="comment-arrow" id="commentPrevBtn" disabled>&#10094;</button>
+              <div class="comment-slide" id="commentSlide">
+                <!-- Aqui entram 2 comentários de cada vez, via JS -->
               </div>
-              <!-- 2) Flávio, Portugal -->
-              <div class="comment-box">
-                <div class="comment-rating">5.00</div>
-                <div class="comment-user-date">
-                  <span><strong>Flávio</strong> <img src="https://img.icons8.com/color/24/portugal.png" alt="Portugal"></span>
-                  <span class="comment-date">janeiro de 2025</span>
-                </div>
-                <p>Ótimo local!</p>
-              </div>
-              <!-- 3) Pierre, França -->
-              <div class="comment-box">
-                <div class="comment-rating">5.00</div>
-                <div class="comment-user-date">
-                  <span><strong>Pierre</strong> <img src="https://img.icons8.com/color/24/france.png" alt="França"></span>
-                  <span class="comment-date">fevereiro de 2025</span>
-                </div>
-                <p>Fantástica estadia!</p>
-              </div>
-              <!-- 4) Mia, Suécia -->
-              <div class="comment-box">
-                <div class="comment-rating">5.00</div>
-                <div class="comment-user-date">
-                  <span><strong>Mia</strong> <img src="https://img.icons8.com/color/24/sweden.png" alt="Suécia"></span>
-                  <span class="comment-date">março de 2025</span>
-                </div>
-                <p>Muito bom!</p>
-              </div>
-              <!-- 5) Laura, Alemanha -->
-              <div class="comment-box">
-                <div class="comment-rating">5.00</div>
-                <div class="comment-user-date">
-                  <span><strong>Laura</strong> <img src="https://img.icons8.com/color/24/germany.png" alt="Alemanha"></span>
-                  <span class="comment-date">abril de 2025</span>
-                </div>
-                <p>Recomendo a 100%!</p>
-              </div>
-              <!-- 6) Luis, Espanha -->
-              <div class="comment-box">
-                <div class="comment-rating">5.00</div>
-                <div class="comment-user-date">
-                  <span><strong>Luis</strong> <img src="https://img.icons8.com/color/24/spain.png" alt="Espanha"></span>
-                  <span class="comment-date">maio de 2025</span>
-                </div>
-                <p>Excelente!</p>
-              </div>
-              <!-- 7) Gianna, Itália -->
-              <div class="comment-box">
-                <div class="comment-rating">5.00</div>
-                <div class="comment-user-date">
-                  <span><strong>Gianna</strong> <img src="https://img.icons8.com/color/24/italy.png" alt="Itália"></span>
-                  <span class="comment-date">junho de 2025</span>
-                </div>
-                <p>Perfeito!</p>
-              </div>
+              <button class="comment-arrow" id="commentNextBtn">&#10095;</button>
             </div>
           </div>
         </div>
@@ -540,7 +502,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
      * SCRIPT BASE (Carrossel, Amenities)
      ********************************************/
     document.addEventListener("DOMContentLoaded", function() {
-      // Carrossel
+      // Carrossel de imagens
       let currentImageIndex = 0;
       const images = [
         "https://i.imgur.com/h9vIQpq.jpeg",
@@ -561,24 +523,31 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
         updateImage();
       });
+      
       // Comodidades
       const showAmenitiesBtn = document.getElementById("show-amenities");
       const amenitiesList = document.getElementById("amenities-list");
       showAmenitiesBtn.addEventListener("click", function() {
         amenitiesList.style.display = (amenitiesList.style.display === "none") ? "block" : "none";
       });
+      
       // Para que toda a área de "nº pessoas" seja clicável
       const bookingGuestsInput = document.getElementById("bookingGuestsInput");
       bookingGuestsInput.addEventListener("click", function() {
         document.getElementById("guests").focus();
       });
+      
+      // Inicializa o carousel de comentários
+      initCommentsCarousel();
     });
+    
     /****************************************************
      * LÓGICA DAS DATAS OCUPADAS (Google Calendar)
      ****************************************************/
     const calendarId1 = "c4qe8v081ip4g6hfb5v5i99j9jfafsfb@import.calendar.google.com";
     const calendarId2 = "gq3m477imq71fcv56kojh45833nphv7r@import.calendar.google.com";
     const apiKey = "SUA_API_KEY"; // Substitua pela sua API Key
+    
     async function getBookedDates() {
       let events = [];
       const urls = [
@@ -590,12 +559,15 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         let data = await response.json();
         if (data.items) {
           data.items.forEach(event => {
-            if (event.start && event.start.date) { events.push(event.start.date); }
+            if (event.start && event.start.date) {
+              events.push(event.start.date);
+            }
           });
         }
       }
       return events;
     }
+    
     /****************************************************
      * DATE PICKER CUSTOMIZADO COM NAVEGAÇÃO E HIGHLIGHT DE INTERVALO
      ****************************************************/
@@ -628,7 +600,9 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     });
     
     async function generateCalendar(year, month) {
-      if (bookedDatesGlobal.length === 0) { bookedDatesGlobal = await getBookedDates(); }
+      if (bookedDatesGlobal.length === 0) {
+        bookedDatesGlobal = await getBookedDates();
+      }
       // Limpa o conteúdo do container do calendário
       datePickerContainer.innerHTML = "";
       
@@ -647,17 +621,25 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       prevBtn.addEventListener("click", () => {
         const today = new Date();
         if (year > today.getFullYear() || (year === today.getFullYear() && month > today.getMonth())) {
-          if (month === 0) { month = 11; year--; } else { month--; }
-          currentCalendarYear = year; currentCalendarMonth = month;
+          if (month === 0) {
+            month = 11; 
+            year--;
+          } else {
+            month--;
+          }
+          currentCalendarYear = year; 
+          currentCalendarMonth = month;
           generateCalendar(year, month);
         }
       });
       headerDiv.appendChild(prevBtn);
+      
       const monthNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho",
                           "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
       const title = document.createElement("span");
       title.textContent = monthNames[month] + " " + year;
       headerDiv.appendChild(title);
+      
       const nextBtn = document.createElement("button");
       nextBtn.className = "nav-button";
       nextBtn.innerHTML = "&#10095;";
@@ -666,8 +648,14 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         const maxDate = new Date(today.getFullYear(), today.getMonth() + 12, 1);
         const currentDisplayed = new Date(year, month, 1);
         if (currentDisplayed < maxDate) {
-          if (month === 11) { month = 0; year++; } else { month++; }
-          currentCalendarYear = year; currentCalendarMonth = month;
+          if (month === 11) {
+            month = 0; 
+            year++;
+          } else {
+            month++;
+          }
+          currentCalendarYear = year; 
+          currentCalendarMonth = month;
           generateCalendar(year, month);
         }
       });
@@ -684,9 +672,13 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         cell.textContent = d;
         gridDiv.appendChild(cell);
       });
+      
       let firstDay = new Date(year, month, 1);
       let startDay = firstDay.getDay();
-      for (let i = 0; i < startDay; i++) { gridDiv.appendChild(document.createElement("div")); }
+      for (let i = 0; i < startDay; i++) {
+        gridDiv.appendChild(document.createElement("div"));
+      }
+      
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       for (let day = 1; day <= daysInMonth; day++) {
         const cell = document.createElement("div");
@@ -694,11 +686,13 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         cell.textContent = day;
         const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
         cell.dataset.date = dateStr;
+        
         // Se a data já estiver selecionada, permite deselecionar ao clicar
         if (selectedCheckin === dateStr || selectedCheckout === dateStr) {
           cell.classList.add("selected-day");
           cell.addEventListener("click", () => {
-            selectedCheckin = null; selectedCheckout = null;
+            selectedCheckin = null; 
+            selectedCheckout = null;
             currentHoveredDate = null;
             generateCalendar(currentCalendarYear, currentCalendarMonth);
             document.querySelector("#bookingDateInput span").textContent = "Selecione datas";
@@ -840,6 +834,138 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
             "\nCheck-out: " + selectedCheckout +
             "\nHóspedes: " + document.getElementById("guests").value);
     });
+    
+    /****************************************************
+     * CAROUSEL DE COMENTÁRIOS (2 por vez)
+     ****************************************************/
+    function initCommentsCarousel() {
+      // Comentários em ordem decrescente de data (todos anteriores a fev/2025)
+      // Observação: "january 2025" é anterior a "february 2025"
+      const commentsData = [
+        {
+          name: "Pierre",
+          country: "france",
+          date: "January 2025",
+          text: "C'était excelent! Je recommande. ",
+          rating: "5.00"
+        },
+        {
+          name: "Alessandra",
+          country: "italy",
+          date: "December 2024",
+          text: "Tutto perfetto, tornerò di sicuro!",
+          rating: "5.00"
+        },
+        {
+          name: "Kevin",
+          country: "uk",
+          date: "November 2024",
+          text: "Everything was great, realy enjoyed my stay.",
+          rating: "5.00"
+        },
+        {
+          name: "Laura",
+          country: "germany",
+          date: "October 2024",
+          text: "Alles war super, wir kommen Wieder!",
+          rating: "5.00"
+        },
+        {
+          name: "Luis",
+          country: "spain",
+          date: "September 2024",
+          text: "Excelente lugar, me encantó!",
+          rating: "5.00"
+        },
+        {
+          name: "Bruno",
+          country: "portugal",
+          date: "August 2024",
+          text: "adorei a estadia, super recomendo. ",
+          rating: "5.00"
+        },
+        {
+          name: "Mia",
+          country: "sweden",
+          date: "July 2024",
+          text: "Underbar vistelse! tack.",
+          rating: "5.00"
+        }
+      ];
+      
+      // Referências
+      const commentSlide = document.getElementById("commentSlide");
+      const prevBtn = document.getElementById("commentPrevBtn");
+      const nextBtn = document.getElementById("commentNextBtn");
+      
+      let currentIndex = 0; // índice do primeiro comentário exibido
+      
+      // Renderiza 2 comentários a partir de currentIndex
+      function renderComments() {
+        commentSlide.innerHTML = ""; // limpa
+        for (let i = 0; i < 2; i++) {
+          const commentIndex = currentIndex + i;
+          if (commentIndex < commentsData.length) {
+            const c = commentsData[commentIndex];
+            // Cria a "caixa" de comentário
+            const commentBox = document.createElement("div");
+            commentBox.className = "comment-box";
+            
+            // Bandeira do país
+            let flagUrl = "";
+            switch (c.country) {
+              case "france": flagUrl = "https://img.icons8.com/color/24/france.png"; break;
+              case "italy": flagUrl = "https://img.icons8.com/color/24/italy.png"; break;
+              case "uk": flagUrl = "https://img.icons8.com/color/24/great-britain.png"; break;
+              case "germany": flagUrl = "https://img.icons8.com/color/24/germany.png"; break;
+              case "spain": flagUrl = "https://img.icons8.com/color/24/spain.png"; break;
+              case "portugal": flagUrl = "https://img.icons8.com/color/24/portugal.png"; break;
+              case "sweden": flagUrl = "https://img.icons8.com/color/24/sweden.png"; break;
+              default: flagUrl = "https://img.icons8.com/fluency/24/globe.png"; 
+            }
+            
+            // Monta o HTML interno
+            commentBox.innerHTML = `
+              <div class="comment-rating">
+                <img src="https://img.icons8.com/emoji/20/star-emoji.png" alt="star icon" style="vertical-align: middle;"> 
+                ${c.rating}
+              </div>
+              <div class="comment-user-date">
+                <span><strong>${c.name}</strong> <img src="${flagUrl}" alt="${c.country}"></span>
+                <span class="comment-date">${c.date}</span>
+              </div>
+              <p>${c.text}</p>
+            `;
+            
+            commentSlide.appendChild(commentBox);
+          }
+        }
+        
+        // Botão prev: desativado se currentIndex=0
+        prevBtn.disabled = (currentIndex === 0);
+        // Botão next: desativado se currentIndex >= (commentsData.length-2)
+        // pois se estamos no penúltimo comentário, só há espaço pra exibir +1
+        nextBtn.disabled = (currentIndex >= commentsData.length - 2);
+      }
+      
+      // Listeners
+      prevBtn.addEventListener("click", () => {
+        if (currentIndex > 0) {
+          currentIndex--;
+          renderComments();
+        }
+      });
+      
+      nextBtn.addEventListener("click", () => {
+        if (currentIndex < commentsData.length - 2) {
+          currentIndex++;
+          renderComments();
+        }
+      });
+      
+      // Render inicial
+      renderComments();
+    }
   </script>
 </body>
 </html>
