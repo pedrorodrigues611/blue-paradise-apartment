@@ -129,10 +129,18 @@
       padding: 10px;
       border-radius: 5px;
     }
-    /* ========== Regras da Casa ========== */
-    .rules, .rules p {
-      font-size: 16px;
-      color: var(--primary-color);
+    /* ========== Regras da Casa (para não partir frase no meio) ========== */
+    .rules {
+      display: flex;          /* permitir "embrulhar" as regras */
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+    .rule-item {
+      white-space: nowrap;    /* faz a frase ficar toda na mesma linha */
+      background: #f1f1f1;
+      border-radius: 5px;
+      padding: 5px 10px;
     }
     /* ========== Calendário (Disponibilidade) ========== */
     .calendar h3 {
@@ -147,77 +155,6 @@
       height: 400px;
       border: none;
       border-radius: 5px;
-    }
-    /* ========== Área de Comentários com 2 por vez ========== */
-    .comments {
-      color: var(--primary-color);
-      font-size: 16px;
-    }
-    .comments h2 {
-      color: var(--primary-color);
-      margin-bottom: 10px;
-    }
-    .comments-summary {
-      margin-bottom: 15px;
-      font-size: 16px;
-      color: var(--primary-color);
-    }
-    /* Carousel de comentários */
-    .comments-carousel {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .comment-arrow {
-      background: none;
-      border: none;
-      font-size: 24px;
-      color: var(--primary-color);
-      cursor: pointer;
-      padding: 5px 10px;
-      border-radius: 50%;
-      transition: background 0.3s;
-    }
-    .comment-arrow:hover {
-      background-color: #ddd;
-    }
-    .comment-arrow:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
-    .comment-slide {
-      display: flex;
-      gap: 20px;
-    }
-    /* Cada "caixa" de comentário */
-    .comment-box {
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 10px;
-      width: 250px; /* forçar uma largura fixa para ficar lado a lado */
-      background-color: #f9f9f9;
-      color: var(--primary-color);
-    }
-    .comment-rating {
-      background-color: var(--primary-color);
-      color: #fff;
-      padding: 5px 10px;
-      border-radius: 4px;
-      display: inline-block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .comment-user-date {
-      margin-bottom: 5px;
-    }
-    .comment-user-date strong {
-      margin-right: 5px;
-    }
-    .comment-date {
-      font-size: 14px;
-      color: #333;
-      display: block;
-      margin-top: 3px;
     }
     /* ========== Booking Container (Reserva) ========== */
     .booking-container {
@@ -250,26 +187,30 @@
       background: #fafafa;
       cursor: pointer;
       transition: border-color 0.3s;
+      position: relative; /* para manipular o select se necessário */
     }
     .booking-input:hover { border-color: var(--primary-color); }
     .booking-input img {
       width: 20px;
       height: 20px;
       margin-right: 8px;
+      pointer-events: none; /* para não "bloquear" clique */
     }
     .booking-input span {
       font-size: 16px;
       color: #666;
+      pointer-events: none;
     }
-    /* Estilização do select (para Nº de pessoas) */
+    /* Tornar o SELECT invisível e ocupar toda a área, para clique funcionar em qualquer ponto */
+    .booking-guests {
+      position: relative;
+    }
     .booking-guests select {
+      position: absolute;
+      top: 0; left: 0;
       width: 100%;
-      border: none;
-      outline: none;
-      font-size: 16px;
-      color: #666;
-      background: transparent;
-      appearance: none;
+      height: 100%;
+      opacity: 0;
       cursor: pointer;
     }
     /* ========== Date Picker Customizado ========== */
@@ -321,10 +262,13 @@
     .date-picker-day:hover {
       background-color: #ddd;
     }
+    /* Dias bloqueados: riscado, esbranquiçado, sem clique */
     .disabled-day {
-      background-color: #1B3F4B;
-      color: #fff;
+      background-color: #eee;
+      color: #999;
+      text-decoration: line-through;
       cursor: not-allowed;
+      pointer-events: none; /* não clica */
     }
     .selected-day {
       background-color: var(--primary-color);
@@ -423,8 +367,12 @@
           <br><hr><br>
           <h2>Regras da casa</h2>
           <div class="rules">
-            <p>✔ Check-in: 15h &nbsp; ✔ Check-out: 11h</p>
-            <p>✔ Crianças permitidas &nbsp; ✔ Bebés permitidos &nbsp; ❌ Fumar não permitido &nbsp; ❌ Festas não permitidas</p>
+            <div class="rule-item">✔ Check-in: 15h</div>
+            <div class="rule-item">✔ Check-out: 11h</div>
+            <div class="rule-item">✔ Crianças permitidas</div>
+            <div class="rule-item">✔ Bebés permitidos</div>
+            <div class="rule-item">❌ Fumar não permitido</div>
+            <div class="rule-item">❌ Festas não permitidas</div>
           </div>
           <br><hr><br>
           <div class="calendar">
@@ -439,21 +387,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
                     frameborder="0" 
                     scrolling="no">
             </iframe>
-          </div>
-          <br><hr><br>
-          <!-- Área de comentários com 2 por vez -->
-          <div class="comments">
-            <h2>Comentários (7)</h2>
-            <div class="comments-summary">
-              <p>Média de avaliações: <strong>5.00</strong></p>
-            </div>
-            <div class="comments-carousel">
-              <button class="comment-arrow" id="commentPrevBtn" disabled>&#10094;</button>
-              <div class="comment-slide" id="commentSlide">
-                <!-- Aqui entram 2 comentários de cada vez, via JS -->
-              </div>
-              <button class="comment-arrow" id="commentNextBtn">&#10095;</button>
-            </div>
           </div>
         </div>
       </div>
@@ -530,15 +463,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       showAmenitiesBtn.addEventListener("click", function() {
         amenitiesList.style.display = (amenitiesList.style.display === "none") ? "block" : "none";
       });
-      
-      // Para que toda a área de "nº pessoas" seja clicável
-      const bookingGuestsInput = document.getElementById("bookingGuestsInput");
-      bookingGuestsInput.addEventListener("click", function() {
-        document.getElementById("guests").focus();
-      });
-      
-      // Inicializa o carousel de comentários
-      initCommentsCarousel();
     });
     
     /****************************************************
@@ -599,6 +523,26 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
     });
     
+    // Função para verificar se há algum dia bloqueado no intervalo
+    function isBlockedInRange(startDate, endDate) {
+      // Se endDate < startDate, não faz sentido
+      if (endDate < startDate) return false;
+      // Percorre cada dia no intervalo e verifica se está bloqueado
+      let date = new Date(startDate.getTime());
+      while (date <= endDate) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        const ds = `${y}-${m}-${d}`;
+        if (bookedDatesGlobal.includes(ds)) {
+          return true; // encontrou um bloqueado
+        }
+        // avança 1 dia
+        date.setDate(date.getDate() + 1);
+      }
+      return false;
+    }
+    
     async function generateCalendar(year, month) {
       if (bookedDatesGlobal.length === 0) {
         bookedDatesGlobal = await getBookedDates();
@@ -606,7 +550,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       // Limpa o conteúdo do container do calendário
       datePickerContainer.innerHTML = "";
       
-      // Cria e adiciona a mensagem de estadia mínima (ela será reposicionada dinamicamente)
+      // Cria e adiciona a mensagem de estadia mínima
       minNightsMessage = document.createElement("div");
       minNightsMessage.id = "minNightsMessage";
       minNightsMessage.textContent = "A estadia mínima é 4 noites";
@@ -700,9 +644,14 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
             breakdownContainer.style.display = "none";
             reserveBtn.style.display = "none";
           });
-        } else if (bookedDatesGlobal.includes(dateStr)) {
+        }
+        // Se for um dia bloqueado
+        else if (bookedDatesGlobal.includes(dateStr)) {
           cell.classList.add("disabled-day");
-        } else {
+          // pointer-events: none (já no CSS) => sem clique
+        }
+        else {
+          // Dia normal
           cell.addEventListener("mouseover", function() {
             if (selectedCheckin && !selectedCheckout) {
               currentHoveredDate = dateStr;
@@ -720,7 +669,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       datePickerContainer.appendChild(gridDiv);
     }
     
-    // Atualiza os destaques e reposiciona o aviso, se necessário
+    // Verifica se existe algum bloqueio no range e se atende min. 4 noites
     function updateCalendarHighlights() {
       const dayCells = datePickerContainer.querySelectorAll(".date-picker-day");
       if (!selectedCheckin || !currentHoveredDate) {
@@ -735,8 +684,12 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         minNightsMessage.style.display = "none";
         return;
       }
+      // Verifica se há bloqueio no intervalo
+      const blocked = isBlockedInRange(checkinDate, hoveredDate);
       const potentialNights = (hoveredDate - checkinDate) / (1000 * 3600 * 24);
-      if (potentialNights < 4) {
+      
+      // Se há bloqueio ou se < 4 noites
+      if (blocked || potentialNights < 4) {
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
         const hoveredCell = datePickerContainer.querySelector(`[data-date="${currentHoveredDate}"]`);
         if (hoveredCell) {
@@ -759,17 +712,21 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
     }
     
-    // Converte YYYY-MM-DD para DD/MM/AAAA
-    function formatDate(dateStr) {
-      const parts = dateStr.split("-");
-      return parts[2] + "/" + parts[1] + "/" + parts[0];
-    }
-    
     function handleDateSelection(dateStr) {
       if (selectedCheckin && !selectedCheckout) {
-        const nights = (new Date(dateStr) - new Date(selectedCheckin)) / (1000 * 3600 * 24);
-        if (nights < 4) { 
-          return; 
+        const checkinDate = new Date(selectedCheckin);
+        const checkoutDate = new Date(dateStr);
+        if (checkoutDate <= checkinDate) return;
+        
+        // Verifica se existe bloqueio no intervalo
+        if (isBlockedInRange(checkinDate, checkoutDate)) {
+          // não permite concluir
+          return;
+        }
+        const nights = (checkoutDate - checkinDate) / (1000 * 3600 * 24);
+        if (nights < 4) {
+          // não atinge min. 4 noites
+          return;
         }
         selectedCheckout = dateStr;
         datePickerContainer.style.display = "none";
@@ -834,138 +791,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
             "\nCheck-out: " + selectedCheckout +
             "\nHóspedes: " + document.getElementById("guests").value);
     });
-    
-    /****************************************************
-     * CAROUSEL DE COMENTÁRIOS (2 por vez)
-     ****************************************************/
-    function initCommentsCarousel() {
-      // Comentários em ordem decrescente de data (todos anteriores a fev/2025)
-      // Observação: "january 2025" é anterior a "february 2025"
-      const commentsData = [
-        {
-          name: "Pierre",
-          country: "france",
-          date: "January 2025",
-          text: "C'était excelent! Je recommande. ",
-          rating: "5.00"
-        },
-        {
-          name: "Alessandra",
-          country: "italy",
-          date: "December 2024",
-          text: "Tutto perfetto, tornerò di sicuro!",
-          rating: "5.00"
-        },
-        {
-          name: "Kevin",
-          country: "uk",
-          date: "November 2024",
-          text: "Everything was great, realy enjoyed my stay.",
-          rating: "5.00"
-        },
-        {
-          name: "Laura",
-          country: "germany",
-          date: "October 2024",
-          text: "Alles war super, wir kommen Wieder!",
-          rating: "5.00"
-        },
-        {
-          name: "Luis",
-          country: "spain",
-          date: "September 2024",
-          text: "Excelente lugar, me encantó!",
-          rating: "5.00"
-        },
-        {
-          name: "Bruno",
-          country: "portugal",
-          date: "August 2024",
-          text: "adorei a estadia, super recomendo. ",
-          rating: "5.00"
-        },
-        {
-          name: "Mia",
-          country: "sweden",
-          date: "July 2024",
-          text: "Underbar vistelse! tack.",
-          rating: "5.00"
-        }
-      ];
-      
-      // Referências
-      const commentSlide = document.getElementById("commentSlide");
-      const prevBtn = document.getElementById("commentPrevBtn");
-      const nextBtn = document.getElementById("commentNextBtn");
-      
-      let currentIndex = 0; // índice do primeiro comentário exibido
-      
-      // Renderiza 2 comentários a partir de currentIndex
-      function renderComments() {
-        commentSlide.innerHTML = ""; // limpa
-        for (let i = 0; i < 2; i++) {
-          const commentIndex = currentIndex + i;
-          if (commentIndex < commentsData.length) {
-            const c = commentsData[commentIndex];
-            // Cria a "caixa" de comentário
-            const commentBox = document.createElement("div");
-            commentBox.className = "comment-box";
-            
-            // Bandeira do país
-            let flagUrl = "";
-            switch (c.country) {
-              case "france": flagUrl = "https://img.icons8.com/color/24/france.png"; break;
-              case "italy": flagUrl = "https://img.icons8.com/color/24/italy.png"; break;
-              case "uk": flagUrl = "https://img.icons8.com/color/24/great-britain.png"; break;
-              case "germany": flagUrl = "https://img.icons8.com/color/24/germany.png"; break;
-              case "spain": flagUrl = "https://img.icons8.com/color/24/spain.png"; break;
-              case "portugal": flagUrl = "https://img.icons8.com/color/24/portugal.png"; break;
-              case "sweden": flagUrl = "https://img.icons8.com/color/24/sweden.png"; break;
-              default: flagUrl = "https://img.icons8.com/fluency/24/globe.png"; 
-            }
-            
-            // Monta o HTML interno
-            commentBox.innerHTML = `
-              <div class="comment-rating">
-                <img src="https://img.icons8.com/emoji/20/star-emoji.png" alt="star icon" style="vertical-align: middle;"> 
-                ${c.rating}
-              </div>
-              <div class="comment-user-date">
-                <span><strong>${c.name}</strong> <img src="${flagUrl}" alt="${c.country}"></span>
-                <span class="comment-date">${c.date}</span>
-              </div>
-              <p>${c.text}</p>
-            `;
-            
-            commentSlide.appendChild(commentBox);
-          }
-        }
-        
-        // Botão prev: desativado se currentIndex=0
-        prevBtn.disabled = (currentIndex === 0);
-        // Botão next: desativado se currentIndex >= (commentsData.length-2)
-        // pois se estamos no penúltimo comentário, só há espaço pra exibir +1
-        nextBtn.disabled = (currentIndex >= commentsData.length - 2);
-      }
-      
-      // Listeners
-      prevBtn.addEventListener("click", () => {
-        if (currentIndex > 0) {
-          currentIndex--;
-          renderComments();
-        }
-      });
-      
-      nextBtn.addEventListener("click", () => {
-        if (currentIndex < commentsData.length - 2) {
-          currentIndex++;
-          renderComments();
-        }
-      });
-      
-      // Render inicial
-      renderComments();
-    }
   </script>
 </body>
 </html>
