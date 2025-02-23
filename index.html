@@ -83,7 +83,7 @@
     .description h1,
     .description h2,
     .description h3 {
-      /* Já usam a cor var(--primary-color) herdada do body */
+      /* Herdam a cor azul via body */
     }
     .description p {
       font-size: 16px;
@@ -96,7 +96,7 @@
     }
     /* Separadores com espaçamento extra */
     br + hr + br {
-      /* Espaçamento extra garantido */
+      /* espaçamento extra garantido */
     }
     hr {
       border: 0;
@@ -276,6 +276,18 @@
       height: 100%;
       opacity: 0;
       cursor: pointer;
+    }
+    /* Exibe o número selecionado */
+    #guestsDisplay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
     }
     /* ========== Date Picker Customizado ========== */
     .date-picker-container {
@@ -541,7 +553,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         document.getElementById("guests").focus();
       });
       
-      // Atualiza o display do nº de hóspedes ao alterar o select
+      // Atualiza o display do nº de hóspedes
       document.getElementById("guests").addEventListener("change", function() {
         document.getElementById("guestsDisplay").textContent = this.value;
       });
@@ -568,16 +580,16 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         if (data.items) {
           data.items.forEach(event => {
             if (event.start && event.start.date) {
-              // Se existir um período (end.date), marque todos os dias do intervalo
+              // Se existir um período, bloqueie todos os dias do intervalo.
               let startDate = new Date(event.start.date);
               let endDate = event.end && event.end.date ? new Date(event.end.date) : new Date(event.start.date);
-              // Em Google Calendar, o end.date é exclusivo, então bloqueie até o dia anterior
+              // Em Google Calendar, a data final é exclusiva.
               while(startDate < endDate) {
                 let y = startDate.getFullYear();
-                let m = String(startDate.getMonth()+1).padStart(2,"0");
-                let d = String(startDate.getDate()).padStart(2,"0");
+                let m = String(startDate.getMonth() + 1).padStart(2, "0");
+                let d = String(startDate.getDate()).padStart(2, "0");
                 events.push(`${y}-${m}-${d}`);
-                startDate.setDate(startDate.getDate()+1);
+                startDate.setDate(startDate.getDate() + 1);
               }
             }
           });
@@ -621,11 +633,11 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       let date = new Date(startDate.getTime());
       while(date <= endDate) {
         const y = date.getFullYear();
-        const m = String(date.getMonth()+1).padStart(2,"0");
-        const d = String(date.getDate()).padStart(2,"0");
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
         const ds = `${y}-${m}-${d}`;
         if (bookedDatesGlobal.includes(ds)) return true;
-        date.setDate(date.getDate()+1);
+        date.setDate(date.getDate() + 1);
       }
       return false;
     }
@@ -695,13 +707,19 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
       
       const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+      today.setHours(0,0,0,0);
       for (let day = 1; day <= daysInMonth; day++) {
         const cell = document.createElement("div");
         cell.className = "date-picker-day";
         cell.textContent = day;
+        const cellDate = new Date(year, month, day);
         const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
         cell.dataset.date = dateStr;
-        if (selectedCheckin === dateStr || selectedCheckout === dateStr) {
+        // Bloquear dias anteriores a hoje
+        if (cellDate < today) {
+          cell.classList.add("disabled-day");
+        } else if (selectedCheckin === dateStr || selectedCheckout === dateStr) {
           cell.classList.add("selected-day");
           cell.addEventListener("click", () => {
             selectedCheckin = null; 
