@@ -10,7 +10,7 @@
       --primary-hover: #16303a;
     }
     /* ========== CSS BASE ========= */
-    body, h1, h2, h3, p, button, span, select {
+    body, h1, h2, h3, p, button, span, select, div {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
@@ -64,7 +64,7 @@
     .image-gallery button:hover {
       background-color: var(--primary-hover);
     }
-    /* ========== Conteúdo em 2 colunas (Informações / Reserva) ========== */
+    /* ========== Conteúdo em 2 colunas (Informações da Casa / Reserva) ========== */
     .content-wrapper {
       display: flex;
       gap: 20px;
@@ -97,7 +97,7 @@
     }
     /* Separadores com espaçamento extra */
     br + hr + br {
-      /* garante espaçamento acima e abaixo do <hr> */
+      /* Espaçamento extra garantido */
     }
     hr {
       border: 0;
@@ -130,9 +130,17 @@
       border-radius: 5px;
     }
     /* ========== Regras da Casa ========== */
-    .rules, .rules p {
-      font-size: 16px;
-      color: var(--primary-color);
+    .rules {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+    .rule-item {
+      white-space: nowrap;
+      background: #f1f1f1;
+      border-radius: 5px;
+      padding: 5px 10px;
     }
     /* ========== Calendário (Disponibilidade) ========== */
     .calendar h3 {
@@ -148,7 +156,7 @@
       border: none;
       border-radius: 5px;
     }
-    /* ========== Área de Comentários com 2 por vez ========== */
+    /* ========== Área de Comentários (Carousel de 2 por vez) ========== */
     .comments {
       color: var(--primary-color);
       font-size: 16px;
@@ -162,7 +170,6 @@
       font-size: 16px;
       color: var(--primary-color);
     }
-    /* Carousel de comentários */
     .comments-carousel {
       display: flex;
       align-items: center;
@@ -189,12 +196,11 @@
       display: flex;
       gap: 20px;
     }
-    /* Cada "caixa" de comentário */
     .comment-box {
       border: 1px solid #ddd;
       border-radius: 6px;
       padding: 10px;
-      width: 250px; /* forçar uma largura fixa para ficar lado a lado */
+      width: 250px;
       background-color: #f9f9f9;
       color: var(--primary-color);
     }
@@ -234,7 +240,6 @@
       color: #2c3e50;
       margin-bottom: 15px;
     }
-    /* Linha de inputs para data e nº de pessoas */
     .booking-inputs {
       display: flex;
       gap: 10px;
@@ -256,20 +261,24 @@
       width: 20px;
       height: 20px;
       margin-right: 8px;
+      pointer-events: none;
     }
     .booking-input span {
       font-size: 16px;
       color: #666;
+      pointer-events: none;
     }
-    /* Estilização do select (para Nº de pessoas) */
-    .booking-guests select {
+    /* Faz com que toda a área do select seja clicável */
+    .booking-input.booking-guests {
+      position: relative;
+    }
+    .booking-input.booking-guests select {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      border: none;
-      outline: none;
-      font-size: 16px;
-      color: #666;
-      background: transparent;
-      appearance: none;
+      height: 100%;
+      opacity: 0;
       cursor: pointer;
     }
     /* ========== Date Picker Customizado ========== */
@@ -321,10 +330,13 @@
     .date-picker-day:hover {
       background-color: #ddd;
     }
+    /* Dias bloqueados: fundo esbranquiçado, texto em cor clara, riscado e sem ação */
     .disabled-day {
-      background-color: #1B3F4B;
-      color: #fff;
+      background-color: #eee;
+      color: #999;
+      text-decoration: line-through;
       cursor: not-allowed;
+      pointer-events: none;
     }
     .selected-day {
       background-color: var(--primary-color);
@@ -334,7 +346,7 @@
       background-color: var(--primary-color) !important;
       color: #fff !important;
     }
-    /* Aviso de estadia mínima – width ajustada ao conteúdo */
+    /* Aviso de estadia mínima – ajustado ao conteúdo */
     #minNightsMessage {
       display: none;
       padding: 5px 10px;
@@ -360,7 +372,6 @@
       margin: 5px 0;
       font-size: 14px;
     }
-    /* Link para "Ver detalhes / Ocultar" */
     .toggle-detalhes {
       display: inline-block;
       margin-top: 10px;
@@ -369,7 +380,6 @@
       text-decoration: underline;
       font-size: 14px;
     }
-    /* Botão Reservar */
     .reserve-btn {
       width: 100%;
       background-color: var(--primary-color);
@@ -387,7 +397,7 @@
 </head>
 <body>
   <div class="container">
-    <!-- Carrossel de imagens (imagem maior) -->
+    <!-- Carrossel de imagens -->
     <div class="image-gallery">
       <button class="prev">&#10094;</button>
       <div class="main-image">
@@ -395,7 +405,7 @@
       </div>
       <button class="next">&#10095;</button>
     </div>
-    <!-- Divisão em 2 colunas: Informações da Casa (esquerda) e Reserva (direita) -->
+    <!-- Divisão em 2 colunas: Informações da Casa e Reserva -->
     <div class="content-wrapper">
       <!-- Coluna Esquerda: Informações da Casa -->
       <div class="left-column">
@@ -423,8 +433,12 @@
           <br><hr><br>
           <h2>Regras da casa</h2>
           <div class="rules">
-            <p>✔ Check-in: 15h &nbsp; ✔ Check-out: 11h</p>
-            <p>✔ Crianças permitidas &nbsp; ✔ Bebés permitidos &nbsp; ❌ Fumar não permitido &nbsp; ❌ Festas não permitidas</p>
+            <div class="rule-item">✔ Check-in: 15h</div>
+            <div class="rule-item">✔ Check-out: 11h</div>
+            <div class="rule-item">✔ Crianças permitidas</div>
+            <div class="rule-item">✔ Bebés permitidos</div>
+            <div class="rule-item">❌ Fumar não permitido</div>
+            <div class="rule-item">❌ Festas não permitidas</div>
           </div>
           <br><hr><br>
           <div class="calendar">
@@ -441,7 +455,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
             </iframe>
           </div>
           <br><hr><br>
-          <!-- Área de comentários com 2 por vez -->
+          <!-- Área de comentários com carousel de 2 por vez -->
           <div class="comments">
             <h2>Comentários (7)</h2>
             <div class="comments-summary">
@@ -450,25 +464,22 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
             <div class="comments-carousel">
               <button class="comment-arrow" id="commentPrevBtn" disabled>&#10094;</button>
               <div class="comment-slide" id="commentSlide">
-                <!-- Aqui entram 2 comentários de cada vez, via JS -->
+                <!-- Os comentários serão renderizados via JS -->
               </div>
               <button class="comment-arrow" id="commentNextBtn">&#10095;</button>
             </div>
           </div>
         </div>
       </div>
-      <!-- Coluna Direita: Container de Reserva -->
+      <!-- Coluna Direita: Reserva -->
       <div class="right-column">
         <div class="booking-container">
           <div class="price">€120/noite</div>
-          <!-- Linha de inputs: Data e Nº de pessoas -->
           <div class="booking-inputs">
-            <!-- Campo para selecionar datas -->
             <div class="booking-input" id="bookingDateInput">
               <img src="https://img.icons8.com/fluency/48/000000/calendar.png" alt="Calendário">
               <span>Selecione datas</span>
             </div>
-            <!-- Campo para selecionar nº de pessoas -->
             <div class="booking-input booking-guests" id="bookingGuestsInput">
               <img src="https://img.icons8.com/fluency-systems-regular/48/000000/user.png" alt="Ícone de pessoa">
               <select id="guests">
@@ -479,18 +490,14 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
               </select>
             </div>
           </div>
-          <!-- Date Picker Customizado -->
           <div class="date-picker-container" id="customDatePicker"></div>
-          <!-- Resumo (exibe datas e preço total) – o total aparece numa row abaixo das datas -->
           <div class="resumo-container" id="resumoContainer">
             <p id="resumoText"></p>
             <span id="toggleDetalhes" class="toggle-detalhes">Ver detalhes</span>
           </div>
-          <!-- Breakdown (detalhamento dos preços) -->
           <div class="breakdown-container" id="breakdownContainer">
             <p id="breakdownText"></p>
           </div>
-          <!-- Botão Reservar -->
           <button class="reserve-btn" id="reserveBtn" style="display:none;">Reservar</button>
         </div>
       </div>
@@ -599,20 +606,32 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
     });
     
+    // Verifica se há dia bloqueado no intervalo
+    function isBlockedInRange(startDate, endDate) {
+      if (endDate < startDate) return false;
+      let date = new Date(startDate.getTime());
+      while(date <= endDate) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        const ds = `${y}-${m}-${d}`;
+        if (bookedDatesGlobal.includes(ds)) return true;
+        date.setDate(date.getDate() + 1);
+      }
+      return false;
+    }
+    
     async function generateCalendar(year, month) {
       if (bookedDatesGlobal.length === 0) {
         bookedDatesGlobal = await getBookedDates();
       }
-      // Limpa o conteúdo do container do calendário
       datePickerContainer.innerHTML = "";
       
-      // Cria e adiciona a mensagem de estadia mínima (ela será reposicionada dinamicamente)
       minNightsMessage = document.createElement("div");
       minNightsMessage.id = "minNightsMessage";
       minNightsMessage.textContent = "A estadia mínima é 4 noites";
       datePickerContainer.appendChild(minNightsMessage);
       
-      // Cabeçalho com navegação
       const headerDiv = document.createElement("div");
       headerDiv.className = "date-picker-header";
       const prevBtn = document.createElement("button");
@@ -621,14 +640,8 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       prevBtn.addEventListener("click", () => {
         const today = new Date();
         if (year > today.getFullYear() || (year === today.getFullYear() && month > today.getMonth())) {
-          if (month === 0) {
-            month = 11; 
-            year--;
-          } else {
-            month--;
-          }
-          currentCalendarYear = year; 
-          currentCalendarMonth = month;
+          if (month === 0) { month = 11; year--; } else { month--; }
+          currentCalendarYear = year; currentCalendarMonth = month;
           generateCalendar(year, month);
         }
       });
@@ -648,21 +661,14 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         const maxDate = new Date(today.getFullYear(), today.getMonth() + 12, 1);
         const currentDisplayed = new Date(year, month, 1);
         if (currentDisplayed < maxDate) {
-          if (month === 11) {
-            month = 0; 
-            year++;
-          } else {
-            month++;
-          }
-          currentCalendarYear = year; 
-          currentCalendarMonth = month;
+          if (month === 11) { month = 0; year++; } else { month++; }
+          currentCalendarYear = year; currentCalendarMonth = month;
           generateCalendar(year, month);
         }
       });
       headerDiv.appendChild(nextBtn);
       datePickerContainer.appendChild(headerDiv);
       
-      // Grid de dias da semana
       const gridDiv = document.createElement("div");
       gridDiv.className = "date-picker-grid";
       const daysOfWeek = ["D","S","T","Q","Q","S","S"];
@@ -687,7 +693,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
         cell.dataset.date = dateStr;
         
-        // Se a data já estiver selecionada, permite deselecionar ao clicar
         if (selectedCheckin === dateStr || selectedCheckout === dateStr) {
           cell.classList.add("selected-day");
           cell.addEventListener("click", () => {
@@ -720,7 +725,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       datePickerContainer.appendChild(gridDiv);
     }
     
-    // Atualiza os destaques e reposiciona o aviso, se necessário
     function updateCalendarHighlights() {
       const dayCells = datePickerContainer.querySelectorAll(".date-picker-day");
       if (!selectedCheckin || !currentHoveredDate) {
@@ -736,7 +740,8 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         return;
       }
       const potentialNights = (hoveredDate - checkinDate) / (1000 * 3600 * 24);
-      if (potentialNights < 4) {
+      const blocked = isBlockedInRange(checkinDate, hoveredDate);
+      if (blocked || potentialNights < 4) {
         dayCells.forEach(cell => cell.classList.remove("hover-range"));
         const hoveredCell = datePickerContainer.querySelector(`[data-date="${currentHoveredDate}"]`);
         if (hoveredCell) {
@@ -759,7 +764,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
     }
     
-    // Converte YYYY-MM-DD para DD/MM/AAAA
     function formatDate(dateStr) {
       const parts = dateStr.split("-");
       return parts[2] + "/" + parts[1] + "/" + parts[0];
@@ -767,10 +771,12 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     
     function handleDateSelection(dateStr) {
       if (selectedCheckin && !selectedCheckout) {
-        const nights = (new Date(dateStr) - new Date(selectedCheckin)) / (1000 * 3600 * 24);
-        if (nights < 4) { 
-          return; 
-        }
+        const checkinDate = new Date(selectedCheckin);
+        const checkoutDate = new Date(dateStr);
+        if (checkoutDate <= checkinDate) return;
+        if (isBlockedInRange(checkinDate, checkoutDate)) return;
+        const nights = (checkoutDate - checkinDate) / (1000 * 3600 * 24);
+        if (nights < 4) return;
         selectedCheckout = dateStr;
         datePickerContainer.style.display = "none";
         showResumo();
@@ -788,8 +794,8 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     }
     
     /****************************************************
-     * RESUMO E BREAKDOWN (Reserva)
-     ****************************************************/
+       RESUMO E BREAKDOWN (Reserva)
+    ****************************************************/
     function showResumo() {
       const nights = calculateNights(selectedCheckin, selectedCheckout);
       const baseRate = 120;
@@ -797,7 +803,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       const cleaningFee = 50;
       let discount = (nights > 7) ? 0.04 * nightsCost : 0;
       const total = nightsCost - discount + cleaningFee;
-      // Exibe as datas numa linha e o total noutra linha
       resumoText.innerHTML = `<p>${formatDate(selectedCheckin)} - ${formatDate(selectedCheckout)}</p>
                               <p>Total: ${total.toFixed(2)}€</p>`;
       resumoContainer.style.display = "block";
@@ -836,17 +841,15 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     });
     
     /****************************************************
-     * CAROUSEL DE COMENTÁRIOS (2 por vez)
-     ****************************************************/
+       CAROUSEL DE COMENTÁRIOS (2 por vez)
+    ****************************************************/
     function initCommentsCarousel() {
-      // Comentários em ordem decrescente de data (todos anteriores a fev/2025)
-      // Observação: "january 2025" é anterior a "february 2025"
       const commentsData = [
         {
           name: "Pierre",
           country: "france",
           date: "January 2025",
-          text: "C'était excelent! Je recommande. ",
+          text: "C'était excelent! Je recommande.",
           rating: "5.00"
         },
         {
@@ -881,7 +884,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
           name: "Bruno",
           country: "portugal",
           date: "August 2024",
-          text: "adorei a estadia, super recomendo. ",
+          text: "adorei a estadia, super recomendo.",
           rating: "5.00"
         },
         {
@@ -893,25 +896,20 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         }
       ];
       
-      // Referências
       const commentSlide = document.getElementById("commentSlide");
       const prevBtn = document.getElementById("commentPrevBtn");
       const nextBtn = document.getElementById("commentNextBtn");
       
-      let currentIndex = 0; // índice do primeiro comentário exibido
+      let currentIndex = 0;
       
-      // Renderiza 2 comentários a partir de currentIndex
       function renderComments() {
-        commentSlide.innerHTML = ""; // limpa
+        commentSlide.innerHTML = "";
         for (let i = 0; i < 2; i++) {
           const commentIndex = currentIndex + i;
           if (commentIndex < commentsData.length) {
             const c = commentsData[commentIndex];
-            // Cria a "caixa" de comentário
             const commentBox = document.createElement("div");
             commentBox.className = "comment-box";
-            
-            // Bandeira do país
             let flagUrl = "";
             switch (c.country) {
               case "france": flagUrl = "https://img.icons8.com/color/24/france.png"; break;
@@ -921,14 +919,11 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
               case "spain": flagUrl = "https://img.icons8.com/color/24/spain.png"; break;
               case "portugal": flagUrl = "https://img.icons8.com/color/24/portugal.png"; break;
               case "sweden": flagUrl = "https://img.icons8.com/color/24/sweden.png"; break;
-              default: flagUrl = "https://img.icons8.com/fluency/24/globe.png"; 
+              default: flagUrl = "https://img.icons8.com/fluency/24/globe.png";
             }
-            
-            // Monta o HTML interno
             commentBox.innerHTML = `
               <div class="comment-rating">
-                <img src="https://img.icons8.com/emoji/20/star-emoji.png" alt="star icon" style="vertical-align: middle;"> 
-                ${c.rating}
+                <img src="https://img.icons8.com/emoji/20/star-emoji.png" alt="star icon" style="vertical-align: middle;"> ${c.rating}
               </div>
               <div class="comment-user-date">
                 <span><strong>${c.name}</strong> <img src="${flagUrl}" alt="${c.country}"></span>
@@ -936,19 +931,13 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
               </div>
               <p>${c.text}</p>
             `;
-            
             commentSlide.appendChild(commentBox);
           }
         }
-        
-        // Botão prev: desativado se currentIndex=0
         prevBtn.disabled = (currentIndex === 0);
-        // Botão next: desativado se currentIndex >= (commentsData.length-2)
-        // pois se estamos no penúltimo comentário, só há espaço pra exibir +1
         nextBtn.disabled = (currentIndex >= commentsData.length - 2);
       }
       
-      // Listeners
       prevBtn.addEventListener("click", () => {
         if (currentIndex > 0) {
           currentIndex--;
@@ -963,7 +952,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         }
       });
       
-      // Render inicial
       renderComments();
     }
   </script>
