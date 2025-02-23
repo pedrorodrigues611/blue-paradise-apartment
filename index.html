@@ -97,7 +97,7 @@
     }
     /* Separadores com espaçamento extra */
     br + hr + br {
-      /* Espaçamento extra garantido */
+      /* espaçamento extra garantido */
     }
     hr {
       border: 0;
@@ -240,10 +240,12 @@
       color: #2c3e50;
       margin-bottom: 15px;
     }
+    /* Linha de inputs para data e Nº de pessoas */
     .booking-inputs {
       display: flex;
       gap: 10px;
       margin-bottom: 15px;
+      flex-wrap: wrap;
     }
     .booking-input {
       flex: 1;
@@ -255,6 +257,7 @@
       background: #fafafa;
       cursor: pointer;
       transition: border-color 0.3s;
+      margin-bottom: 10px;
     }
     .booking-input:hover { border-color: var(--primary-color); }
     .booking-input img {
@@ -268,9 +271,11 @@
       color: #666;
       pointer-events: none;
     }
-    /* Faz com que toda a área do select seja clicável */
+    /* Botão Nº de pessoas: para exibir o número selecionado e ser clicável em toda a área */
     .booking-input.booking-guests {
       position: relative;
+      /* Quando não houver espaço, este container pode ocupar 100% (via flex-wrap) */
+      flex: 1 1 150px;
     }
     .booking-input.booking-guests select {
       position: absolute;
@@ -330,7 +335,7 @@
     .date-picker-day:hover {
       background-color: #ddd;
     }
-    /* Dias bloqueados: fundo esbranquiçado, texto em cor clara, riscado e sem ação */
+    /* Dias bloqueados: fundo esbranquiçado, texto em cinzento, riscado, sem ação */
     .disabled-day {
       background-color: #eee;
       color: #999;
@@ -405,7 +410,7 @@
       </div>
       <button class="next">&#10095;</button>
     </div>
-    <!-- Divisão em 2 colunas: Informações da Casa e Reserva -->
+    <!-- Divisão em 2 colunas: Informações da Casa / Reserva -->
     <div class="content-wrapper">
       <!-- Coluna Esquerda: Informações da Casa -->
       <div class="left-column">
@@ -464,7 +469,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
             <div class="comments-carousel">
               <button class="comment-arrow" id="commentPrevBtn" disabled>&#10094;</button>
               <div class="comment-slide" id="commentSlide">
-                <!-- Os comentários serão renderizados via JS -->
+                <!-- Comentários renderizados via JS -->
               </div>
               <button class="comment-arrow" id="commentNextBtn">&#10095;</button>
             </div>
@@ -554,7 +559,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     const calendarId1 = "c4qe8v081ip4g6hfb5v5i99j9jfafsfb@import.calendar.google.com";
     const calendarId2 = "gq3m477imq71fcv56kojh45833nphv7r@import.calendar.google.com";
     const apiKey = "SUA_API_KEY"; // Substitua pela sua API Key
-    
     async function getBookedDates() {
       let events = [];
       const urls = [
@@ -593,7 +597,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     const breakdownText = document.getElementById("breakdownText");
     const reserveBtn = document.getElementById("reserveBtn");
     
-    // Ao clicar no input de datas, alterna a exibição do calendário
     bookingDateInput.addEventListener("click", () => {
       if (datePickerContainer.style.display === "none" || datePickerContainer.style.display === "") {
         datePickerContainer.style.display = "block";
@@ -606,7 +609,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
       }
     });
     
-    // Verifica se há dia bloqueado no intervalo
     function isBlockedInRange(startDate, endDate) {
       if (endDate < startDate) return false;
       let date = new Date(startDate.getTime());
@@ -692,7 +694,6 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
         cell.textContent = day;
         const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
         cell.dataset.date = dateStr;
-        
         if (selectedCheckin === dateStr || selectedCheckout === dateStr) {
           cell.classList.add("selected-day");
           cell.addEventListener("click", () => {
@@ -794,7 +795,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     }
     
     /****************************************************
-       RESUMO E BREAKDOWN (Reserva)
+     * RESUMO E BREAKDOWN (Reserva)
     ****************************************************/
     function showResumo() {
       const nights = calculateNights(selectedCheckin, selectedCheckout);
@@ -841,7 +842,7 @@ src=c4qe8v081ip4g6hfb5v5i99j9jfafsfb%40import.calendar.google.com
     });
     
     /****************************************************
-       CAROUSEL DE COMENTÁRIOS (2 por vez)
+     * CAROUSEL DE COMENTÁRIOS (2 por vez)
     ****************************************************/
     function initCommentsCarousel() {
       const commentsData = [
